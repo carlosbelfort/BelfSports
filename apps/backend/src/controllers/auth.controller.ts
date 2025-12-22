@@ -1,23 +1,30 @@
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import { Request, Response } from "express"
+import prisma from "../lib/prisma"
+import bcrypt from "bcryptjs"
+import jwt from "jsonwebtoken"
 
-const prisma = new PrismaClient();
+class AuthController {
+  async login(req: Request, res: Response) {
+    const { email, password } = req.body
 
-export async function login(req: any, res: any) {
-  const { email, senha } = req.body;
+    const user = await prisma.user.findUnique({ where: { email } })
+    if (!user) {
+      return res.status(401).json({ message: "Usuário ou senha inválidos" })
+    }
 
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) return res.status(401).json({ success: false });
+    const valid = await bcrypt.compare(password, user.password)
+    if (!valid) {
+      return res.status(401).json({ message: "Usuário ou senha inválidos" })
+    }
 
-  const valid = await bcrypt.compare(senha, user.password);
-  if (!valid) return res.status(401).json({ success: false });
+    const token = jwt.sign(
+      { sub: user.id, role: user.role },
+      process.env.JWT_SECRET!,
+      { expiresIn: "1d" }
+    )
 
-  const token = jwt.sign(
-    { id: user.id, role: user.role },
-    process.env.JWT_SECRET!,
-    { expiresIn: '1d' }
-  );
-
-  return res.json({ success: true, token });
+    return res.json({ token })
+  }
 }
+
+export default new AuthController()

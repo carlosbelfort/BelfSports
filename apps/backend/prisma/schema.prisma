@@ -4,27 +4,8 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
 }
 
-model User {
-  id       Int    @id @default(autoincrement())
-  name     String
-  email    String @unique
-  password String
-  role     Role
-}
-
-model Event {
-  id    Int    @id @default(autoincrement())
-  title String
-}
-
-model Photo {
-  id     Int    @id @default(autoincrement())
-  url    String
-  status String
-}
 
 enum Role {
   ADMIN
@@ -33,3 +14,27 @@ enum Role {
   VIEWER
 }
 
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(VIEWER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  date        DateTime
+  createdAt   DateTime @default(now())
+}
+
+model Photo {
+  id        String   @id @default(uuid())
+  filename  String
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

@@ -1,8 +1,10 @@
-export function roleMiddleware(roles: string[]) {
-  return (req: any, res: any, next: any) => {
+import { Request, Response, NextFunction } from "express"
+
+export default function roleMiddleware(roles: string[]) {
+  return (req: Request, res: Response, next: NextFunction) => {
     if (!roles.includes(req.user.role)) {
-      return res.status(403).json({ message: 'Acesso negado' });
+      return res.status(403).json({ message: "Acesso negado" })
     }
-    next();
-  };
+    next()
+  }
 }

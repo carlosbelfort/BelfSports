@@ -1,3 +1,9 @@
-export function health(req: any, res: any) {
-  res.json({ status: 'API online' });
+import { Request, Response } from "express"
+
+class HealthController {
+  check(req: Request, res: Response) {
+    return res.json({ status: "ok" })
+  }
 }
+
+export default new HealthController()

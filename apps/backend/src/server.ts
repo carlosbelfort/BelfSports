@@ -1,5 +1,12 @@
-import app from './app';
+import Fastify from 'fastify'
+import routes from './routes/index.ts'
 
-app.listen(3333, () => {
-  console.log('🚀 Backend rodando em http://localhost:3333');
-});
+const app = Fastify({ logger: true })
+
+app.register(routes)
+
+const PORT = 3333
+
+app.listen({ port: PORT }, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`)
+})

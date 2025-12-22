@@ -1,14 +1,24 @@
-import { PrismaClient } from '@prisma/client';
+import { Request, Response } from "express"
+import prisma from "../lib/prisma"
 
-const prisma = new PrismaClient();
+class PhotoController {
+  async upload(req: Request, res: Response) {
+    const { filename } = req.body
 
-export async function uploadPhoto(req: any, res: any) {
-  const photo = await prisma.photo.create({
-    data: {
-      url: req.file.filename,
-      status: 'pending'
-    }
-  });
+    const photo = await prisma.photo.create({
+      data: { filename },
+    })
 
-  res.json(photo);
+    return res.status(201).json(photo)
+  }
+
+  async listApproved(req: Request, res: Response) {
+    const photos = await prisma.photo.findMany({
+      where: { approved: true },
+    })
+
+    return res.json(photos)
+  }
 }
+
+export default new PhotoController()
