@@ -17,6 +17,3 @@ async function main() {
 }
 
 main();
-Execute depois:
-npx prisma migrate dev
-npx prisma db seed
