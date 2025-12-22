@@ -3,6 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -17,52 +20,54 @@ export default function LoginPage() {
     try {
       const response = await axios.post('http://localhost:3333/login', {
         email,
-        senha
+        senha,
       });
 
       if (response.data.success) {
         localStorage.setItem('auth', 'true');
         router.push('/dashboard');
       }
-    } catch (err) {
-      setErro('E-mail ou senha inválidos');
+    } catch {
+      setErro('Credenciais inválidas');
     }
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-100">
-      <form
-        onSubmit={handleLogin}
-        className="w-full max-w-sm rounded bg-white p-6 shadow"
-      >
-        <h1 className="mb-6 text-center text-2xl font-bold">Login</h1>
+    <main className="flex min-h-screen items-center justify-center bg-background px-4">
 
-        {erro && (
-          <p className="mb-3 text-center text-sm text-red-600">
-            {erro}
-          </p>
-        )}
+      <Card className="w-full max-w-md bg-card border-border shadow-lg">
+        <CardHeader>
+          <CardTitle className="text-center text-2xl text-purple-400">
+            BelfSports
+          </CardTitle>
+        </CardHeader>
 
-        <input
-          type="email"
-          placeholder="E-mail"
-          className="mb-3 w-full rounded border px-3 py-2"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <CardContent className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-4">
+            {erro && (
+              <p className="text-sm text-red-500 text-center">{erro}</p>
+            )}
 
-        <input
-          type="password"
-          placeholder="Senha"
-          className="mb-4 w-full rounded border px-3 py-2"
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
-        />
+            <Input
+              type="email"
+              placeholder="E-mail"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
-        <button className="w-full rounded bg-blue-600 py-2 text-white">
-          Entrar
-        </button>
-      </form>
+            <Input
+              type="password"
+              placeholder="Senha"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+            />
+
+            <Button className="w-full bg-purple-600 hover:bg-purple-700">
+              Entrar
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </main>
   );
 }
