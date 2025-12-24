@@ -1,25 +1,57 @@
-import { Router } from 'express';
+import type { FastifyInstance } from 'fastify'
+import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
+import { prisma } from '../lib/prisma'
 
-const router = Router();
+/**
+ * Rotas de autenticação
+ */
+export async function authRoutes(app: FastifyInstance) {
+  app.post('/login', async (request, reply) => {
+    const { email, password } = request.body as {
+      email: string
+      password: string
+    }
 
-router.post('/login', (req, res) => {
-  const { email, senha } = req.body;
+    // Busca usuário pelo email
+    const user = await prisma.user.findUnique({
+      where: { email },
+    })
 
-  // Simulação acadêmica
-  if (email === 'admin@email.com' && senha === '123456') {
-    return res.json({
-      success: true,
-      user: {
-        email,
-        role: 'admin'
+    if (!user) {
+      return reply.status(401).send({
+        message: 'Credenciais inválidas',
+      })
+    }
+
+    // Compara senha
+    const passwordMatch = await bcrypt.compare(password, user.password)
+
+    if (!passwordMatch) {
+      return reply.status(401).send({
+        message: 'Credenciais inválidas',
+      })
+    }
+
+    // Gera JWT
+    const token = jwt.sign(
+      {
+        sub: user.id,
+        role: user.role,
+      },
+      process.env.JWT_SECRET!,
+      {
+        expiresIn: '1d',
       }
-    });
-  }
+    )
 
-  return res.status(401).json({
-    success: false,
-    message: 'Credenciais inválidas'
-  });
-});
-
-export default router;
+    return reply.send({
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      },
+    })
+  })
+}

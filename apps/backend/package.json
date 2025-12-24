@@ -13,17 +13,20 @@
     "@fastify/cors": "^11.2.0",
     "@fastify/jwt": "^10.0.0",
     "@fastify/multipart": "^9.3.0",
-    "@prisma/client": "^7.2.0",
+    "@prisma/client": "^6.19.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.2",
     "fastify": "^5.6.2",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "prisma": "^6.19.1"
   },
   "devDependencies": {
-    "prisma": "^7.2.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
+  },
+  "prisma": {
+  "seed": "npx ts-node prisma/seed.ts"
   }
 }
