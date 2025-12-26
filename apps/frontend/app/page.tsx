@@ -11,7 +11,7 @@ export default function Home() {
      
 
       {/* ---------- CONTEÚDO PRINCIPAL ---------- */}
-      <section className="flex flex-col items-center text-center px-6 py-20 gap-6">
+      <section className="flex flex-col items-center justify-center text-center px-6 py-20 gap-6">
 
         <h1 className="text-3xl md:text-5xl font-extrabold leading-tight">
           <span className="text-red-600">Belf Sports</span>
