@@ -24,7 +24,7 @@ export default function OrganizerDashboard() {
   }
 
   return (
-    
+    <DashboardLayout>
     <main className="p-6">
       <h1 className="text-2xl font-bold">
         Dashboard do Organizador
@@ -34,6 +34,7 @@ export default function OrganizerDashboard() {
         Bem-vindo! Aqui você gerencia seus eventos.
       </p>
     </main>
+    </DashboardLayout>
     
   );
 }

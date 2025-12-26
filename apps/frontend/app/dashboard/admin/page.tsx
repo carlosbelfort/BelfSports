@@ -25,6 +25,7 @@ export default function AdminDashboard() {
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
+import DashboardLayout from '@/components/DashboardLayout'
 //import DashboardLayout from '@/components/DashboardLayout'
 
 export default function AdminDashboard() {
@@ -40,7 +41,8 @@ export default function AdminDashboard() {
   if (loading) return null
 
   return (
-    <main>
+    <DashboardLayout>
+    
       <h1 className="text-2xl mb-6">Painel Administrativo</h1>
       <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
         Quod in dolorem delectus alias eaque, eos sit mollitia quisquam culpa ipsa, 
@@ -49,6 +51,7 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* cards administrativos */}
       </div>
-    </main>
+    
+    </DashboardLayout>
   )
 }
