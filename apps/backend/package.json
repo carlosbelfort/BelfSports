@@ -23,10 +23,12 @@
     "prisma": "^6.19.1"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },
   "prisma": {
-  "seed": "npx ts-node prisma/seed.ts"
+    "seed": "npx ts-node prisma/seed.ts"
   }
 }

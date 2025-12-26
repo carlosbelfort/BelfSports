@@ -1,4 +1,4 @@
-import { Request, Response } from "express"
+import type { Request, Response } from "express"
 
 class HealthController {
   check(req: Request, res: Response) {

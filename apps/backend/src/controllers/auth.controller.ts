@@ -1,5 +1,5 @@
-import { Request, Response } from "express"
-import prisma from "../lib/prisma"
+import type { Request, Response } from "express"
+import {prisma} from "../lib/prisma"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 

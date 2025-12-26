@@ -9,20 +9,40 @@ export function middleware(req: NextRequest) {
   }
 }*/
 
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get('token')
+  const { pathname } = request.nextUrl;
 
-  if (
-    request.nextUrl.pathname.startsWith('/dashboard') &&
-    !token
-  ) {
-    return NextResponse.redirect(
-      new URL('/login', request.url)
-    )
+  const token = request.cookies.get("token")?.value;
+  const role = request.cookies.get("role")?.value;
+
+  // 🔒 Proteção geral
+  if (pathname.startsWith("/dashboard")) {
+    if (!token) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+
+    if (pathname.startsWith("/dashboard/admin") && role !== "ADMIN") {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+
+    if (
+      pathname.startsWith("/dashboard/organizer") &&
+      role !== "ORGANIZER"
+    ) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+
+    if (pathname.startsWith("/dashboard/user") && role !== "USER") {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
   }
 
-  return NextResponse.next()
+  return NextResponse.next();
 }
+
+export const config = {
+  matcher: ["/dashboard/:path*"],
+};

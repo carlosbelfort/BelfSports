@@ -1,125 +1,117 @@
-/*'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { api } from '@/lib/api';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card } from '@/components/ui/card';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { API_URL } from "@/lib/api";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-  const [erro, setErro] = useState('');
 
-  async function handleLogin(e: any) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  
+
+
+  /**
+   * Envia credenciais para o backend
+   * Recebe JWT e salva no localStorage
+   */
+  async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
-    setErro('');
+    setError("");
+    setLoading(true);
 
     try {
-      const res = await api.post('/login', { email, senha });
+      const response = await fetch(`${API_URL}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-      document.cookie = `auth=${res.data.token}`;
-      router.push('/dashboard');
-    } catch {
-      setErro('Credenciais inválidas');
+      if (!response.ok) {
+        throw new Error("Credenciais inválidas");
+      }
+
+      const data = await response.json();
+
+      console.log("LOGIN RESPONSE:", data);
+
+      
+
+      document.cookie = `token=${data.token}; path=/`;
+      document.cookie = `role=${data.user.role}; path=/`;
+
+      // Salva token e role
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("role", data.user.role);
+      localStorage.setItem("userId", data.user.id);
+
+      // Redireciona
+      switch (data.user.role) {
+        case "ADMIN":
+          router.push("/dashboard/admin");
+          break;
+
+        case "ORGANIZER":
+          router.push("/dashboard/organizer");
+          break;
+
+        case "USER":
+          router.push("/dashboard/user");
+          break;
+
+        default:
+          router.push("/");
+      }
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center px-4">
-      <Card>
-        <h1 className="mb-4 text-center text-2xl font-bold text-primary">
-          BelfSports
-        </h1>
+    <div className="flex items-center justify-center py-20 px-4">
+      <div className="w-full max-w-md bg-zinc-900 border border-red-700 rounded-xl shadow-lg p-8">
+        <h2 className="text-2xl font-bold text-center text-red-600 mb-6">
+          Acesso ao BelfSports
+        </h2>
 
-        {erro && <p className="mb-3 text-center text-red-500">{erro}</p>}
-
-        <form onSubmit={handleLogin} className="space-y-3">
-          <Input
+        <form onSubmit={handleLogin} className="flex flex-col gap-4">
+          <input
+            type="email"
             placeholder="E-mail"
+            className="bg-black border border-zinc-700 rounded px-4 py-3 text-white focus:outline-none focus:border-red-600"
             value={email}
-            onChange={(e: any) => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
+            required
           />
-          <Input
+
+          <input
             type="password"
             placeholder="Senha"
-            value={senha}
-            onChange={(e: any) => setSenha(e.target.value)}
+            className="bg-black border border-zinc-700 rounded px-4 py-3 text-white focus:outline-none focus:border-red-600"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
           />
-          <Button>Entrar</Button>
+
+          {error && (
+            <span className="text-sm text-red-500 text-center">{error}</span>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-red-600 hover:bg-red-700 transition font-semibold py-3 rounded mt-2 disabled:opacity-60"
+          >
+            {loading ? "Entrando..." : "Entrar"}
+          </button>
         </form>
-      </Card>
-    </main>
+      </div>
+    </div>
   );
-}*/
-
-'use client'
-
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { api } from '@/lib/api'
-
-export default function LoginPage() {
-  const router = useRouter()
-
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-
-  async function handleLogin(e: React.FormEvent) {
-    e.preventDefault()
-
-    const response = await api('/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
-    })
-
-    if (response.token) {
-      localStorage.setItem('token', response.token)
-      localStorage.setItem('user', JSON.stringify(response.user))
-      router.push('/dashboard')
-    } else {
-      setError('Email ou senha inválidos')
-    }
-  }
-
-  return (
-    <main className="min-h-screen flex items-center justify-center">
-      <form
-        onSubmit={handleLogin}
-        className="w-96 p-6 border rounded"
-      >
-        <h1 className="text-2xl font-bold mb-4">Login</h1>
-
-        {error && (
-          <p className="text-red-500 mb-2">{error}</p>
-        )}
-
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full mb-3 p-2 border rounded"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-
-        <input
-          type="password"
-          placeholder="Senha"
-          className="w-full mb-4 p-2 border rounded"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
-        <button
-          type="submit"
-          className="w-full bg-black text-white p-2 rounded"
-        >
-          Entrar
-        </button>
-      </form>
-    </main>
-  )
 }

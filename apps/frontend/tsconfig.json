@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "strict": true,
     "target": "ES2017",
     "lib": [
       "dom",
@@ -7,8 +8,7 @@
       "esnext"
     ],
     "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
+    "skipLibCheck": true,    
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -34,7 +34,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "**/*.mts",    
+    "types/**/*.d.ts"
   ],
   "exclude": [
     "node_modules"

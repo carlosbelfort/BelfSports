@@ -1,17 +1,20 @@
-import './globals.css';
-
-export const metadata = {
-  title: 'BelfSports'
-};
+import { AuthProvider } from "@/context/AuthContext";
+import Header from "@/components/header";
+import "./globals.css";
 
 export default function RootLayout({
-  children
+  children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-br">
-      <body>{children}</body>
+    <html lang="pt-BR">
+      <body>
+        <AuthProvider>
+          <Header /> {/* ✅ HEADER GLOBAL */}
+          {children}
+        </AuthProvider>
+      </body>
     </html>
   );
 }
