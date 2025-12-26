@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
+
 export default function Header() {
   const { user, logout } = useAuth();
   const router = useRouter();
@@ -27,7 +28,7 @@ export default function Header() {
         {/* Navegação */}
         <nav className="flex items-center gap-8">
           <Link
-            href="/sobre"
+            href="/Sobre"
             className="no-underline transition-opacity hover:opacity-80"
           >
             Sobre
