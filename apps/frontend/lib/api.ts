@@ -2,7 +2,7 @@
  * Centraliza a URL do backend
  * Facilita troca de ambiente (dev / prod)
  */
-export const API_URL = 'http://localhost:3333'
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3333"
 
 export const api = async (
   endpoint: string,

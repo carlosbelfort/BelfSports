@@ -11,5 +11,5 @@
 }
 
 body {
-  @apply bg-[var(--color3)] text-white;
+  @apply bg-[var(--color2)] text-white;
 }

@@ -74,6 +74,7 @@ export default function LoginPage() {
   }
 
   return (
+      
     <div className="flex items-center justify-center py-20 px-4">
       <div className="w-full max-w-md bg-zinc-900 border border-red-700 rounded-xl shadow-lg p-8">
         <h2 className="text-2xl font-bold text-center text-red-600 mb-6">
@@ -113,5 +114,6 @@ export default function LoginPage() {
         </form>
       </div>
     </div>
+    
   );
 }

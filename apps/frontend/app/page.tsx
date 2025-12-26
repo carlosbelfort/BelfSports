@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-black text-white flex flex-col">
+    <main className="min-h-screen  bg-[var(--color2)] text-white flex flex-col">
 
      
 
