@@ -7,12 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 enum Role {
   ADMIN
   ORGANIZER
   PHOTOGRAPHER
-  VIEWER
+  USER
 }
 
 model User {
@@ -20,9 +19,11 @@ model User {
   name      String
   email     String   @unique
   password  String
-  role      Role     @default(VIEWER)
+  role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  spots Spot[]
 }
 
 model Event {
@@ -30,7 +31,7 @@ model Event {
   title       String
   description String
   date        DateTime
-  createdAt   DateTime @default(now())
+  spots       Spot[]
 }
 
 model Photo {
@@ -38,4 +39,23 @@ model Photo {
   filename  String
   approved  Boolean  @default(false)
   createdAt DateTime @default(now())
+}
+
+model Spot {
+  id        String     @id @default(uuid())
+  imageUrl  String
+  status    SpotStatus @default(PENDING)
+  createdAt DateTime   @default(now())
+
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+enum SpotStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
