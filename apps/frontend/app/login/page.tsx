@@ -55,7 +55,7 @@ export default function LoginPage() {
           break;
 
         case "PHOTOGRAPHER":
-          router.push("/dashboard/photographer/upload");
+          router.push("/dashboard/photographer");
           break;
 
         case "USER":

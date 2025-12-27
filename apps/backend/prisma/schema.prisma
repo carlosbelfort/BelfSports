@@ -24,14 +24,21 @@ model User {
   updatedAt DateTime @updatedAt
 
   spots Spot[]
+  events Event[]
+
 }
 
 model Event {
-  id          String   @id @default(uuid())
-  title       String
-  description String
-  date        DateTime
-  spots       Spot[]
+  id        String   @id @default(uuid())
+  title     String
+  date      DateTime
+  status    EventStatus @default(PENDING)
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User @relation(fields: [userId], references: [id])
+
+  spots Spot[]
 }
 
 model Photo {
@@ -55,6 +62,12 @@ model Spot {
 }
 
 enum SpotStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum EventStatus {
   PENDING
   APPROVED
   REJECTED
