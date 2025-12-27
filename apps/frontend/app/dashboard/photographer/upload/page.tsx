@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { api } from '@/lib/api'
+import DashboardLayout from '@/components/DashboardLayout'
+import Card from '@/components/Card'
 
 export default function UploadSpotPage() {
   const [file, setFile] = useState<File | null>(null)
@@ -23,9 +25,10 @@ export default function UploadSpotPage() {
   }
 
   return (
+    <DashboardLayout>
     <div>
-      <h1 className="text-2xl mb-4">Upload de Foto</h1>
-
+        <Card title="Upload de Foto">
+      
       <input
         type="file"
         accept="image/*"
@@ -44,6 +47,8 @@ export default function UploadSpotPage() {
       >
         Enviar
       </button>
+    </Card>
     </div>
+    </DashboardLayout>
   )
 }

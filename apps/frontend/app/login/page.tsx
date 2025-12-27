@@ -12,9 +12,6 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  
-
-
   /**
    * Envia credenciais para o backend
    * Recebe JWT e salva no localStorage
@@ -39,8 +36,6 @@ export default function LoginPage() {
 
       console.log("LOGIN RESPONSE:", data);
 
-      
-
       document.cookie = `token=${data.token}; path=/`;
       document.cookie = `role=${data.user.role}; path=/`;
 
@@ -59,6 +54,10 @@ export default function LoginPage() {
           router.push("/dashboard/organizer");
           break;
 
+        case "PHOTOGRAPHER":
+          router.push("/dashboard/photographer/upload");
+          break;
+
         case "USER":
           router.push("/dashboard/user");
           break;
@@ -74,7 +73,6 @@ export default function LoginPage() {
   }
 
   return (
-      
     <div className="flex items-center justify-center py-20 px-4">
       <div className="w-full max-w-md bg-zinc-900 border border-red-700 rounded-xl shadow-lg p-8">
         <h2 className="text-2xl font-bold text-center text-red-600 mb-6">
@@ -114,6 +112,5 @@ export default function LoginPage() {
         </form>
       </div>
     </div>
-    
   );
 }
