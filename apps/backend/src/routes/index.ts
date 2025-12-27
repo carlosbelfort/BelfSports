@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import { Router } from "express";
 import { adminRoutes } from "./admin.routes";
+import { spotsRoutes } from "./spots.routes";
 
 // Função única de registro de rotas
 export default async function routes(app: FastifyInstance) {
@@ -23,5 +24,6 @@ export default async function routes(app: FastifyInstance) {
 const routes = Router();
 
 routes.use("/admin", adminRoutes);
+routes.use("/spots", spotsRoutes);
 
 export { routes };
