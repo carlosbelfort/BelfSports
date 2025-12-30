@@ -17,20 +17,21 @@ export default function AdminEventsPage() {
 
   async function loadEvents() {
     try {
-      const response = await api.get("/events/admin/events");
+      const data = await api.get("/events/admin/events");
 
-      if (Array.isArray(response)) {
-        setEvents(response);
+      if (Array.isArray(data)) {
+        setEvents(data);
       } else {
         setEvents([]);
       }
     } catch (err) {
       console.error(err);
+      setEvents([]);
       alert("Erro ao carregar eventos");
     } finally {
       setLoading(false);
     }
-  }
+  }  
 
   async function handleDelete(id: string) {
     const confirmDelete = confirm(

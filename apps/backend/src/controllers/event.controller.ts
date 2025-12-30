@@ -49,19 +49,3 @@ export async function listMyEvents(
 
   return reply.send(events);
 }
-
-export async function approveEvent(
-  request: FastifyRequest,
-  reply: FastifyReply
-) {
-  const { id } = request.params as { id: string };
-
-  const event = await prisma.event.update({
-    where: { id },
-    data: {
-      status: "APPROVED",
-    },
-  });
-
-  return reply.send(event);
-}

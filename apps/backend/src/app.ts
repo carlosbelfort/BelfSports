@@ -13,8 +13,14 @@ const app = Fastify({
   logger: true,
 });
 
-app.register(cors, {
+/*app.register(cors, {
   origin: true,
+});*/
+
+await app.register(cors, {
+  origin: "http://localhost:3000", // frontend
+  methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 });
 
 app.register(multipart);

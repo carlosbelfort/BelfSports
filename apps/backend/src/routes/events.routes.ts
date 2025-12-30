@@ -3,7 +3,8 @@ import { authenticate } from "../middlewares/authenticate";
 import { roleGuard } from "../middlewares/roleGuard";
 import { createEvent, listMyEvents } from "../controllers/event.controller";
 import { prisma } from "../lib/prisma";
-import { approveEvent } from "../controllers/event.controller";
+import { approveEvent } from "../controllers/adminEventsController";
+import { deleteEvent } from "../controllers/adminEventsController";
 
 export async function eventRoutes(app: FastifyInstance) {
   app.get("/", async () => {
@@ -52,26 +53,6 @@ export async function eventRoutes(app: FastifyInstance) {
     createEvent
   );
 
-  //ADMIN APROVA EVENTO
-  /*app.patch(
-    "/events/admin/events/:id/approve",
-    {
-      preHandler: [authenticate, roleGuard(["ADMIN"])],
-    },
-    async (request, reply) => {
-      const { id } = request.params as { id: string };
-
-      const event = await prisma.event.update({
-        where: { id },
-        data: {
-          status: "APPROVED",
-        },
-      });
-
-      return reply.send(event);
-    }
-  );*/
-
   // ADMIN APROVA EVENTO
   app.patch(
     "/admin/events/:id/approve",
@@ -79,5 +60,14 @@ export async function eventRoutes(app: FastifyInstance) {
       preHandler: [authenticate, roleGuard(["ADMIN"])],
     },
     approveEvent
+  );
+
+  // ADMIN DELETA EVENTO
+  app.delete(
+    "/admin/events/:id",
+    {
+      preHandler: [authenticate, roleGuard(["ADMIN"])],
+    },
+    deleteEvent
   );
 }
