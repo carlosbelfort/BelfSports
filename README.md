@@ -86,7 +86,7 @@ http://localhost:3000
   - Email: org@belfsports.com
   - Senha: 123456
 
-  - **Fotógrafo**
+- **Fotógrafo**
   - Email: foto@belfsports.com
   - Senha: 123456
 
