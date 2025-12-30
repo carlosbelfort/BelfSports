@@ -8,10 +8,10 @@ async function main() {
   const password = await bcrypt.hash('123456', 8)
 
   const users = [
-    { name: 'Admin', email: 'admin@teste.com', role: 'ADMIN' },
-    { name: 'Organizer', email: 'org@teste.com', role: 'ORGANIZER' },
-    { name: 'Photographer', email: 'foto@teste.com', role: 'PHOTOGRAPHER' },
-    { name: 'Viewer', email: 'user@teste.com', role: 'USER' }
+    { name: 'Admin', email: 'admin@belfsports.com', role: 'ADMIN' },
+    { name: 'Organizer', email: 'org@belfsports.com', role: 'ORGANIZER' },
+    { name: 'Photographer', email: 'foto@belfsports.com', role: 'PHOTOGRAPHER' },
+    { name: 'Viewer', email: 'user@belfsports.com', role: 'USER' }
   ]
 
   for (const user of users) {
