@@ -1,72 +1,3 @@
-/*"use client";
-
-import { useEffect, useState } from "react";
-import { api } from "@/lib/api";
-
-type Event = {
-  id: string;
-  title: string;
-  date: string;
-  spots: any[];
-};
-
-export default function PhotographerEventsPage() {
-  const [title, setTitle] = useState("");
-  const [date, setDate] = useState("");
-  const [events, setEvents] = useState<Event[]>([]);
-
-  async function loadEvents() {
-    const response = await api("/photographer/events");
-    setEvents(response);
-  }
-
-  async function handleCreate() {
-    await api("/photographer/events", {
-      method: "POST",
-      body: JSON.stringify({ title, date }),
-    });
-
-    setTitle("");
-    setDate("");
-    loadEvents();
-  }
-
-  useEffect(() => {
-    loadEvents();
-  }, []);
-
-  return (
-    <div>
-      <h1 className="text-2xl mb-6">Meus Eventos</h1>
-
-      <div className="mb-6">
-        <input
-          placeholder="Título do evento"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-
-        <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
-
-        <button onClick={handleCreate}>Criar Evento</button>
-      </div>
-
-      <ul>
-        {events.map((event) => (
-          <li key={event.id} className="mb-2">
-            <strong>{event.title}</strong> —{" "}
-            {new Date(event.date).toLocaleDateString()}  
-            ({event.spots.length} fotos)
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}*/
 "use client";
 
 import { useEffect, useState } from "react";
@@ -90,7 +21,7 @@ export default function OrganizerEventsPage() {
   const [date, setDate] = useState("");
   const [location, setLocation] = useState("");
 
-  async function loadEvents() {
+  /*async function loadEvents() {
     try {
       const res = await api("/events");
 
@@ -99,6 +30,19 @@ export default function OrganizerEventsPage() {
       } else {
         setEvents([]);
       }
+    } catch (error) {
+      console.error(error);
+      setEvents([]);
+    } finally {
+      setLoading(false);
+    }
+  }*/
+
+  async function loadEvents() {
+    try {
+      const res = await api("/events");
+
+      setEvents(Array.isArray(res) ? res : []);
     } catch (error) {
       console.error(error);
       setEvents([]);
@@ -123,7 +67,7 @@ export default function OrganizerEventsPage() {
         }),
       });
 
-      alert("Evento criado com sucesso!");
+      alert("Evento criado com sucesso!\nAguarde aprovação do Administrador.");
 
       setTitle("");
       setDate("");

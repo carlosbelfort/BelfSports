@@ -19,8 +19,10 @@ export default function Sidebar() {
       {user.role === 'ADMIN' && (
         <>
           <Link href="/dashboard/admin">Dashboard</Link>
-          <Link href="/dashboard/admin/users">Usuários</Link>
-          <Link href="/dashboard/admin/settings">Configurações</Link>
+          <Link href="/dashboard/admin/events">Eventos</Link>
+          <Link href="/dashboard/admin/moderation">Moderação</Link>
+          <Link href="/dashboard/admin/spots">Spot</Link>
+          <Link href="/dashboard/admin/users">Usuarios</Link>
         </>
       )}
 

@@ -1,19 +1,21 @@
-import { Router } from "express";
-import  ensureAuth  from "../middlewares/auth.middleware";
-import { ensureAdmin } from "../middlewares/ensureAdmin";
+import type { FastifyInstance } from "fastify";
+import ensureAuth from "../middlewares/auth.middleware";
+import roleMiddleware from "../middlewares/role.middleware";
 import {
   listEvents,
   deleteEvent,
 } from "../controllers/adminEventsController";
 
-const adminRoutes = Router();
+export async function adminRoutes(app: FastifyInstance) {
+  // 🔐 autenticação global
+  app.addHook("preHandler", ensureAuth);
 
+  // 🔒 somente ADMIN
+  app.addHook("preHandler", roleMiddleware(["ADMIN"]));
 
+  // 📋 listar todos os eventos
+  app.get("/events", listEvents);
 
-adminRoutes.use(ensureAuth);
-adminRoutes.use(ensureAdmin);
-
-adminRoutes.get("/events", listEvents);
-adminRoutes.delete("/events/:id", deleteEvent);
-
-export { adminRoutes };
+  // 🗑 deletar evento
+  app.delete("/events/:id", deleteEvent);
+}

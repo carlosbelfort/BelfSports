@@ -1,55 +1,14 @@
-/*"use client";
-
-import { useEffect, useState } from "react";
-import { api } from "@/lib/api";
-
-export default function UsersPage() {
-  const [users, setUsers] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-  api.get('/admin/users').then(res => {
-    setUsers(res)
-    setLoading(false)
-  })
-}, []);
-  return (
-    <div>
-      <h1 className="text-2xl mb-6">Gerenciar Usuários</h1>
-      <table className="w-full text-sm">
-        <thead>
-          <tr>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {users.map((user: any) => (
-            <tr key={user.id}>
-              <td>{user.email}</td>
-              <td>{user.role}</td>
-              <td>
-                <button>Promover</button>
-                <button>Excluir</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}*/
-
 "use client";
 
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
+import DashboardLayout from "@/components/DashboardLayout";
 
 type Event = {
   id: string;
   title: string;
   date: string;
+  status: "PENDING" | "APPROVED" | "REJECTED";
 };
 
 export default function AdminEventsPage() {
@@ -58,7 +17,7 @@ export default function AdminEventsPage() {
 
   async function loadEvents() {
     try {
-      const response = await api.get("/admin/events");
+      const response = await api.get("/events/admin/events");
 
       if (Array.isArray(response)) {
         setEvents(response);
@@ -81,12 +40,24 @@ export default function AdminEventsPage() {
     if (!confirmDelete) return;
 
     try {
-      await api.delete(`/admin/events/${id}`);
-      setEvents((prev) =>
-        prev.filter((event) => event.id !== id)
-      );
+      await api.delete(`/events/admin/events/${id}`);
+      setEvents((prev) => prev.filter((event) => event.id !== id));
     } catch (err) {
       alert("Erro ao excluir evento");
+    }
+  }
+
+  async function handleApprove(id: string) {
+    try {
+      await api.patch(`/events/admin/events/${id}/approve`);
+
+      setEvents((prev) =>
+        prev.map((event) =>
+          event.id === id ? { ...event, status: "APPROVED" } : event
+        )
+      );
+    } catch (err) {
+      alert("Erro ao aprovar evento");
     }
   }
 
@@ -99,47 +70,57 @@ export default function AdminEventsPage() {
   }
 
   return (
-    <div>
-      <h1 className="text-2xl mb-6">Gerenciar Eventos</h1>
+    <DashboardLayout>
+      <div>
+        <h1 className="text-2xl mb-6">Gerenciar Eventos</h1>
 
-      {events.length === 0 ? (
-        <p className="text-zinc-400">
-          Nenhum evento cadastrado.
-        </p>
-      ) : (
-        <table className="w-full text-sm border border-zinc-800">
-          <thead className="bg-zinc-900">
-            <tr>
-              <th className="p-2 text-left">Título</th>
-              <th className="p-2 text-left">Data</th>
-              <th className="p-2 text-left">Ações</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {events.map((event) => (
-              <tr
-                key={event.id}
-                className="border-t border-zinc-800"
-              >
-                <td className="p-2">{event.title}</td>
-                <td className="p-2">
-                  {new Date(event.date).toLocaleDateString()}
-                </td>
-                <td className="p-2">
-                  <button
-                    onClick={() => handleDelete(event.id)}
-                    className="text-red-500 hover:underline"
-                  >
-                    Excluir
-                  </button>
-                </td>
+        {events.length === 0 ? (
+          <p className="text-zinc-400">Nenhum evento cadastrado.</p>
+        ) : (
+          <table className="w-full text-sm border border-zinc-800">
+            <thead className="bg-zinc-900">
+              <tr>
+                <th className="p-2 text-left">Título</th>
+                <th className="p-2 text-center">Data</th>
+                <th className="p-2 text-center">Ações</th>
+                <th className="p-2 text-left">Situação</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-    </div>
+            </thead>
+
+            <tbody>
+              {events.map((event) => (
+                <tr key={event.id} className="border-t border-zinc-800">
+                  <td className="p-2">{event.title}</td>
+                  <td className="p-2 text-center">
+                    {new Date(event.date).toLocaleDateString()}
+                  </td>
+
+                  <td className="p-2 text-center">
+                    {event.status === "PENDING" && (
+                      <button
+                        onClick={() => handleApprove(event.id)}
+                        className="text-green-500 hover:underline mr-4"
+                      >
+                        Aprovar
+                      </button>
+                    )}
+
+                    <button
+                      onClick={() => handleDelete(event.id)}
+                      className="text-red-500 hover:underline"
+                    >
+                      Excluir
+                    </button>
+                  </td>
+                  <td className="p-2">
+                    {event.status === "APPROVED" ? "Aprovado" : "Pendente"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </DashboardLayout>
   );
 }
-

@@ -24,7 +24,7 @@ export async function createEvent(
       title,
       location,
       date: new Date(date),
-      userId: user.sub, 
+      userId: user.sub,
     },
   });
 
@@ -40,11 +40,28 @@ export async function listMyEvents(
   const events = await prisma.event.findMany({
     where: {
       userId: user.sub,
+      status: "APPROVED",
     },
     orderBy: {
-      createdAt: "desc",
+      date: "asc",
     },
   });
 
   return reply.send(events);
+}
+
+export async function approveEvent(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  const { id } = request.params as { id: string };
+
+  const event = await prisma.event.update({
+    where: { id },
+    data: {
+      status: "APPROVED",
+    },
+  });
+
+  return reply.send(event);
 }
