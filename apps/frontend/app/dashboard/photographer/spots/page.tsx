@@ -16,8 +16,7 @@ export default function PhotographerSpotsPage() {
   const [eventId, setEventId] = useState("");
   const [events, setEvents] = useState<any[]>([]);
 
-  useEffect(() => {
-    api("/photographer/events").then(setEvents);
+  useEffect(() => {    
     api("/photographer/spots").then(setSpots);
   }, []);
 

@@ -31,9 +31,10 @@ model User {
 model Event {
   id        String   @id @default(uuid())
   title     String
-  date      DateTime
+  location  String
+  date      DateTime  
   status    EventStatus @default(PENDING)
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now())  
 
   userId String
   user   User @relation(fields: [userId], references: [id])

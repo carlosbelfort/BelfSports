@@ -1,24 +1,41 @@
-import type { Request, Response, NextFunction } from "express"
-import jwt from "jsonwebtoken"
+import type { FastifyRequest, FastifyReply } from "fastify";
+import jwt from "jsonwebtoken";
 
-export default function authMiddleware(
-  req: Request,
-  res: Response,
-  next: NextFunction
+interface JwtPayload {
+  sub: string;
+  role: string;
+  email?: string;
+}
+
+export default async function ensureAuth(
+  request: FastifyRequest,
+  reply: FastifyReply
 ) {
-  const authHeader = req.headers.authorization
+  const authHeader = request.headers.authorization;
 
   if (!authHeader) {
-    return res.status(401).json({ message: "Token não informado" })
+    return reply.status(401).send({ message: "Token não informado" });
   }
 
-  const [, token] = authHeader.split(" ")
+  const [, token] = authHeader.split(" ");
+
+  const jwtSecret = process.env.JWT_SECRET;
+  if (!jwtSecret) {
+    throw new Error("JWT_SECRET não definido");
+  }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!)
-    req.user = decoded
-    next()
+    const decoded = jwt.verify(token, jwtSecret);
+
+    if (
+      typeof decoded !== "object" ||
+      !("role" in decoded)
+    ) {
+      return reply.status(401).send({ message: "Token inválido" });
+    }
+
+    request.user = decoded as JwtPayload;
   } catch {
-    return res.status(401).json({ message: "Token inválido" })
+    return reply.status(401).send({ message: "Token inválido" });
   }
 }

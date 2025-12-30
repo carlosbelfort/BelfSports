@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ensureAuth } from "../middlewares/ensureAuth";
+import  ensureAuth  from "../middlewares/auth.middleware";
 import { ensureAdmin } from "../middlewares/ensureAdmin";
 import {
   listEvents,
@@ -7,6 +7,8 @@ import {
 } from "../controllers/adminEventsController";
 
 const adminRoutes = Router();
+
+
 
 adminRoutes.use(ensureAuth);
 adminRoutes.use(ensureAdmin);

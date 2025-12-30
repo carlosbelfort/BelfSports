@@ -1,16 +1,36 @@
-import { Router } from "express";
-import  ensureAuth  from "../middlewares/auth.middleware";
+import type { FastifyInstance } from "fastify";
+import { authenticate } from "../middlewares/authenticate";
+import { roleGuard } from "../middlewares/roleGuard";
 import {
   createEvent,
   listMyEvents,
 } from "../controllers/event.controller";
+import { prisma } from "../lib/prisma";
 
-const eventsRoutes = Router();
+export async function eventRoutes(app: FastifyInstance) {
 
-eventsRoutes.use(ensureAuth);
+  // 📌 LISTAR EVENTOS (PÚBLICO)
+  app.get("/", async () => {
+    return prisma.event.findMany({
+      orderBy: { date: "asc" },
+    });
+  });
 
-// PHOTOGRAPHER
-eventsRoutes.post("/", createEvent);
-eventsRoutes.get("/", listMyEvents);
+  // 📌 LISTAR MEUS EVENTOS (ADMIN / ORGANIZER)
+  app.get(
+    "/me",
+    {
+      preHandler: [authenticate, roleGuard(["ADMIN", "ORGANIZER"])],
+    },
+    listMyEvents
+  );
 
-export { eventsRoutes };
+  // 📌 CRIAR EVENTO (ADMIN / ORGANIZER)
+  app.post(
+    "/",
+    {
+      preHandler: [authenticate, roleGuard(["ADMIN", "ORGANIZER"])],
+    },
+    createEvent
+  );
+}

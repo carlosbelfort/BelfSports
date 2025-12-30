@@ -1,4 +1,4 @@
-import type { Request, Response, NextFunction } from "express"
+/*import type { Request, Response, NextFunction } from "express"
 
 export default function roleMiddleware(roles: string[]) {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -7,4 +7,17 @@ export default function roleMiddleware(roles: string[]) {
     }
     next()
   }
+}*/
+
+import type { FastifyRequest, FastifyReply } from "fastify";
+
+export default function roleMiddleware(roles: string[]) {
+  return async function (
+    request: FastifyRequest,
+    reply: FastifyReply
+  ) {
+    if (!roles.includes(request.user.role)) {
+      return reply.status(403).send({ message: "Acesso negado" });
+    }
+  };
 }

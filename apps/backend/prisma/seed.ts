@@ -11,7 +11,7 @@ async function main() {
     { name: 'Admin', email: 'admin@teste.com', role: 'ADMIN' },
     { name: 'Organizer', email: 'org@teste.com', role: 'ORGANIZER' },
     { name: 'Photographer', email: 'foto@teste.com', role: 'PHOTOGRAPHER' },
-    { name: 'Viewer', email: 'view@teste.com', role: 'VIEWER' }
+    { name: 'Viewer', email: 'user@teste.com', role: 'USER' }
   ]
 
   for (const user of users) {

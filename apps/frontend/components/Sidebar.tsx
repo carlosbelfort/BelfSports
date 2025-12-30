@@ -27,7 +27,7 @@ export default function Sidebar() {
       {user.role === 'ORGANIZER' && (
         <>
           <Link href="/dashboard/organizer">Eventos</Link>
-          <Link href="/dashboard/organizer/create">Criar Evento</Link>
+          <Link href="/dashboard/organizer/events">Criar Evento</Link>
         </>
       )}
 

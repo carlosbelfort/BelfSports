@@ -3,7 +3,7 @@ import { Router } from "express";
 import { adminRoutes } from "./admin.routes";
 import { spotsRoutes } from "./spots.routes";
 import { photographerRoutes } from "./photographer.routes";
-import { eventsRoutes } from "./events.routes";
+import { eventRoutes } from "./events.routes";
 
 // Função única de registro de rotas
 export default async function routes(app: FastifyInstance) {
@@ -28,7 +28,7 @@ const routes = Router();
 routes.use("/admin", adminRoutes);
 routes.use("/spots", spotsRoutes);
 routes.use("/photographer", photographerRoutes);
-routes.use("/events", eventsRoutes);
+routes.use("/events", eventRoutes);
 
 
 export { routes };

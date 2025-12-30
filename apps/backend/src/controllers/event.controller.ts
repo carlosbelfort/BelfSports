@@ -1,60 +1,50 @@
-import type { Request, Response } from "express"
-import {prisma} from "../lib/prisma"
+import type { FastifyRequest, FastifyReply } from "fastify";
+import { prisma } from "../lib/prisma";
 
-class EventController {
-  async list(req: Request, res: Response) {
-    const events = await prisma.event.findMany()
-    return res.json(events)
-  }
+export async function createEvent(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  const { title, location, date } = request.body as {
+    title: string;
+    location: string;
+    date: string;
+  };
 
-  async create(req: Request, res: Response) {
-    const { title, description, date } = req.body
+  const user = request.user as { sub: string };
 
-    const event = await prisma.event.create({
-      data: { title, description, date: new Date(date) },
-    })
-
-    return res.status(201).json(event)
-  }
-}
-
-export default new EventController()
-
-/**
- * PHOTOGRAPHER cria evento
- */
-export async function createEvent(req: Request, res: Response) {
-  const { title, date } = req.body;
-
-  if (!title || !date) {
-    return res.status(400).json({
-      message: "Título e data são obrigatórios",
+  if (!title || !date || !location) {
+    return reply.status(400).send({
+      message: "Título, data e local são obrigatórios",
     });
   }
 
   const event = await prisma.event.create({
     data: {
       title,
+      location,
       date: new Date(date),
-      userId: req.user.id,
+      userId: user.sub, 
     },
   });
 
-  return res.status(201).json(event);
+  return reply.status(201).send(event);
 }
 
-/**
- * PHOTOGRAPHER lista os próprios eventos
- */
-export async function listMyEvents(req: Request, res: Response) {
+export async function listMyEvents(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  const user = request.user as { sub: string };
+
   const events = await prisma.event.findMany({
     where: {
-      userId: req.user.id,
+      userId: user.sub,
     },
     orderBy: {
       createdAt: "desc",
     },
   });
 
-  return res.json(events);
+  return reply.send(events);
 }

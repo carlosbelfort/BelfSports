@@ -11,10 +11,10 @@ export default function PhotographerDashboard() {
 
       <div className="grid md:grid-cols-3 gap-4">
         <Link
-          href="/dashboard/photographer/events"
+          href="/dashboard/photographer/spots"
           className="bg-zinc-900 p-6 rounded"
         >
-          Criar / Ver Eventos
+          Spots
         </Link>
 
         <Link

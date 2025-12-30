@@ -13,6 +13,7 @@
     "@fastify/cors": "^11.2.0",
     "@fastify/jwt": "^10.0.0",
     "@fastify/multipart": "^9.3.0",
+    "@fastify/static": "^9.0.0",
     "@prisma/client": "^6.19.1",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.41.3",
@@ -26,6 +27,7 @@
     "prisma": "^6.19.1"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "tsx": "^4.21.0",

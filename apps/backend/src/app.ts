@@ -1,15 +1,38 @@
-import express from "express"
-import cors from "cors"
-import routes from "./routes"
+import Fastify from "fastify";
+import cors from "@fastify/cors";
+import multipart from "@fastify/multipart";
 
-const app = express()
+import { authRoutes } from "./routes/auth.routes";
+import { eventRoutes } from "./routes/events.routes";
+import { spotsRoutes } from "./routes/spots.routes";
+import { uploadRoutes } from "./routes/upload.routes";
+import { moderationRoutes } from "./routes/moderation.routes";
+import { usersRoutes } from "./routes/users.routes";
 
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
-}))
-app.use(express.json())
-app.use("/uploads", express.static("uploads"))
-app.use(routes)
+const app = Fastify({
+  logger: true,
+});
 
-export default app
+app.register(cors, {
+  origin: true,
+});
+
+app.register(multipart);
+
+// 📌 ROTAS
+app.register(authRoutes, { prefix: "/auth" });
+app.register(eventRoutes, { prefix: "/events" });
+app.register(spotsRoutes, { prefix: "/spots" });
+app.register(uploadRoutes, { prefix: "/upload" });
+app.register(moderationRoutes, { prefix: "/moderation" });
+app.register(usersRoutes, { prefix: "/users" });
+
+// 📂 Uploads públicos (galeria)
+app.register(require("@fastify/static"), {
+  root: require("path").join(__dirname, "..", "uploads"),
+  prefix: "/uploads/",
+});
+
+app.listen({ port: 3333, host: "0.0.0.0" }).then(() => {
+  console.log("🚀 Backend rodando em http://localhost:3333");
+});

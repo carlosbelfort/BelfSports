@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 
 interface User {
   id: string
-  role: 'ADMIN' | 'ORGANIZER' | 'USER'
+  role: 'ADMIN' | 'ORGANIZER' | 'USER' | 'PHOTOGRAPHER'
 }
 
 interface AuthContextType {
