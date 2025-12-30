@@ -1,0 +1,65 @@
+"use client";
+import { useEffect, useState } from "react";
+import { api } from "@/lib/api";
+import SpotList from "@/components/SpotList";
+import SpotForm from "@/components/SpotForm";
+import DashboardLayout from "@/components/DashboardLayout";
+
+export default function OrganizerSpotsPage() {
+  const [spots, setSpots] = useState<any[]>([]);
+  const [events, setEvents] = useState<any[]>([]);
+  const [selectedEvent, setSelectedEvent] = useState<string>("");
+
+  /*async function loadSpots() {
+    const data = await api("/spots");
+    setSpots(data);
+  }*/
+
+  async function loadSpots() {
+    const data = await api("/spots/organizer"); // rota específica para Organizer
+    setSpots(Array.isArray(data) ? data : []);
+  }
+
+  async function loadEvents() {
+    const data = await api("/organizer/events");
+    setEvents(data);
+  }
+
+  async function handleDelete(id: string) {
+    if (!confirm("Excluir este spot?")) return;
+    await api(`/spots/${id}`, { method: "DELETE" });
+    loadSpots();
+  }
+
+  useEffect(() => {
+    loadSpots();
+    loadEvents();
+  }, []);
+
+  return (
+    <DashboardLayout>
+      <div>
+        <h1 className="text-2xl mb-6">Meus Spots</h1>
+
+        <select
+          onChange={(e) => setSelectedEvent(e.target.value)}
+          value={selectedEvent}
+        >
+          <option value="">Selecione um evento</option>
+          {Array.isArray(events) &&
+            events.map((ev) => (
+              <option key={ev.id} value={ev.id}>
+                {ev.title}
+              </option>
+            ))}
+        </select>
+
+        {selectedEvent && (
+          <SpotForm eventId={selectedEvent} onSuccess={loadSpots} />
+        )}
+
+        <SpotList spots={spots} onDelete={handleDelete} />
+      </div>
+    </DashboardLayout>
+  );
+}

@@ -1,13 +1,16 @@
-import multer from 'multer'
-import { CloudinaryStorage } from 'multer-storage-cloudinary'
-import { cloudinary } from './cloudinary'
+import multer from "fastify-multer";
+import fs from "fs";
+import path from "path";
 
-export const storage = new CloudinaryStorage({
-  cloudinary,
-  params: {
-    folder: 'spots',
-    allowed_formats: ['jpg', 'png', 'jpeg'],
-  },
-})
+// Define a pasta de upload relativa ao diretório do backend
+const uploadDir = path.resolve("uploads");
 
-export const upload = multer({ storage })
+// Cria a pasta se não existir
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+export const upload = multer({
+  dest: uploadDir,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+});

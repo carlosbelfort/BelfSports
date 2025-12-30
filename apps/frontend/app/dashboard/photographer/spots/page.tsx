@@ -1,65 +1,43 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
-
-type Spot = {
-  id: string;
-  imageUrl: string;
-  status: string;
-  event: { title: string };
-};
+import SpotList from "@/components/SpotList";
+import SpotUpload from "@/components/SpotUpload";
 
 export default function PhotographerSpotsPage() {
-  const [spots, setSpots] = useState<Spot[]>([]);
-  const [imageUrl, setImageUrl] = useState("");
-  const [eventId, setEventId] = useState("");
+  const [spots, setSpots] = useState<any[]>([]);
   const [events, setEvents] = useState<any[]>([]);
+  const [selectedEvent, setSelectedEvent] = useState<string>("");
 
-  useEffect(() => {    
-    api("/photographer/spots").then(setSpots);
-  }, []);
-
-  async function handleUpload() {
-    await api("/spots", {
-      method: "POST",
-      body: JSON.stringify({ imageUrl, eventId }),
-    });
-
-    setImageUrl("");
-    api("/photographer/spots").then(setSpots);
+  async function loadSpots() {
+    const data = await api("/spots");
+    setSpots(data);
   }
+
+  async function loadEvents() {
+    const data = await api("/photographer/events");
+    setEvents(data);
+  }
+
+  useEffect(() => {
+    loadSpots();
+    loadEvents();
+  }, []);
 
   return (
     <div>
       <h1 className="text-2xl mb-6">Minhas Fotos</h1>
 
-      <select onChange={(e) => setEventId(e.target.value)}>
+      <select onChange={(e) => setSelectedEvent(e.target.value)} value={selectedEvent}>
         <option value="">Selecione um evento</option>
-        {events.map((event: any) => (
-          <option key={event.id} value={event.id}>
-            {event.title}
-          </option>
+        {events.map((ev) => (
+          <option key={ev.id} value={ev.id}>{ev.title}</option>
         ))}
       </select>
 
-      <input
-        placeholder="URL da imagem"
-        value={imageUrl}
-        onChange={(e) => setImageUrl(e.target.value)}
-      />
+      {selectedEvent && <SpotUpload eventId={selectedEvent} onUpload={loadSpots} />}
 
-      <button onClick={handleUpload}>Enviar Foto</button>
-
-      <div className="grid md:grid-cols-3 gap-4 mt-6">
-        {spots.map((spot) => (
-          <div key={spot.id} className="border p-2">
-            <img src={spot.imageUrl} />
-            <p>{spot.event.title}</p>
-            <p>Status: <strong>{spot.status}</strong></p>
-          </div>
-        ))}
-      </div>
+      <SpotList spots={spots} />
     </div>
   );
 }

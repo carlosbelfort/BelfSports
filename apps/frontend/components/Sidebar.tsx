@@ -22,7 +22,7 @@ export default function Sidebar() {
           <Link href="/dashboard/admin/events">Eventos</Link>
           <Link href="/dashboard/admin/createEvent">Criar Evento</Link>
           <Link href="/dashboard/admin/moderation">Moderação</Link>
-          <Link href="/dashboard/admin/spots">Spot</Link>
+          <Link href="/dashboard/admin/spots">Spots</Link>
           <Link href="/dashboard/admin/users">Usuarios</Link>
         </>
       )}
@@ -31,6 +31,7 @@ export default function Sidebar() {
         <>
           <Link href="/dashboard/organizer">Eventos</Link>
           <Link href="/dashboard/organizer/events">Criar Evento</Link>
+          <Link href="/dashboard/organizer/spots">Spots</Link>
         </>
       )}
 

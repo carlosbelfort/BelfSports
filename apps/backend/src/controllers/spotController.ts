@@ -1,35 +1,84 @@
-import type { Request, Response } from "express";
+import type { FastifyReply, FastifyRequest } from "fastify";
 import { prisma } from "../lib/prisma";
+import path from "path";
 
 /**
- * PHOTOGRAPHER envia spot
+ * CREATE SPOT (Admin / Organizer / Photographer)
  */
-export async function createSpot(req: Request, res: Response) {
-  const { imageUrl, eventId } = req.body;
+export async function createSpot(req: FastifyRequest, reply: FastifyReply) {
+  const user = req.user as any;
+  const { eventId } = req.body as any;
+  const file = (req as any).file;
+
+  if (!file) {
+    return reply.status(400).send({ message: "Arquivo não enviado" });
+  }
+
+  // Organizer só pode criar spots em eventos dele
+  if (user.role === "ORGANIZER") {
+    const event = await prisma.event.findUnique({ where: { id: eventId } });
+    if (!event || event.userId !== user.id) {
+      return reply.status(403).send({ message: "Evento não autorizado" });
+    }
+  }
+
+  const imageUrl = `/uploads/${file.filename}`;
 
   const spot = await prisma.spot.create({
     data: {
       imageUrl,
       eventId,
-      userId: req.user.id,
+      userId: user.id,
     },
   });
 
-  return res.status(201).json(spot);
+  return reply.status(201).send(spot);
 }
 
 /**
- * ADMIN e ORGANIZER visualizam
+ * LIST SPOTS (Admin / Organizer / Photographer)
  */
-export async function listSpots(req: Request, res: Response) {
+export async function listSpots(req: FastifyRequest, reply: FastifyReply) {
+  const user = req.user as any;
+
+  let where: any = {};
+
+  if (user.role === "ORGANIZER") {
+    where = {
+      event: { userId: user.id },
+    };
+  } else if (user.role === "PHOTOGRAPHER") {
+    where = { userId: user.id };
+  }
+
   const spots = await prisma.spot.findMany({
+    where,
+    include: {
+      event: true,
+      user: { select: { name: true, email: true } },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  return reply.send(spots);
+}
+
+/**
+ * ORGANIZER: listar apenas spots dos eventos dele
+ */
+export async function listSpotsForOrganizer(req: Request, res: Response) {
+  const userId = req.user.id; // id do organizador logado
+
+  const spots = await prisma.spot.findMany({
+    where: {
+      event: {
+        userId: userId, // apenas eventos do Organizer
+      },
+    },
     include: {
       event: true,
       user: {
-        select: {
-          name: true,
-          email: true,
-        },
+        select: { name: true, email: true }, // info do fotógrafo
       },
     },
     orderBy: {
@@ -39,31 +88,36 @@ export async function listSpots(req: Request, res: Response) {
 
   return res.json(spots);
 }
-
 /**
- * ADMIN aprova / rejeita
+ * UPDATE SPOT STATUS (ADMIN)
  */
-export async function updateSpotStatus(req: Request, res: Response) {
-  const { id } = req.params;
-  const { status } = req.body;
+export async function updateSpotStatus(req: FastifyRequest, reply: FastifyReply) {
+  const { id } = req.params as any;
+  const { status } = req.body as any;
 
   const spot = await prisma.spot.update({
     where: { id },
     data: { status },
   });
 
-  return res.json(spot);
+  return reply.send(spot);
 }
 
 /**
- * ADMIN remove
+ * DELETE SPOT (Admin / Organizer dono)
  */
-export async function deleteSpot(req: Request, res: Response) {
-  const { id } = req.params;
+export async function deleteSpot(req: FastifyRequest, reply: FastifyReply) {
+  const user = req.user as any;
+  const { id } = req.params as any;
 
-  await prisma.spot.delete({
-    where: { id },
-  });
+  const spot = await prisma.spot.findUnique({ where: { id } });
+  if (!spot) return reply.status(404).send({ message: "Spot não encontrado" });
 
-  return res.status(204).send();
+  if (user.role === "ORGANIZER" && spot.userId !== user.id) {
+    return reply.status(403).send({ message: "Não autorizado" });
+  }
+
+  await prisma.spot.delete({ where: { id } });
+
+  return reply.status(204).send();
 }

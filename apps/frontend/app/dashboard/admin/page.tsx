@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import DashboardLayout from "@/components/DashboardLayout";
-import { AdminCard } from '@/components/AdminCard'
+import { AdminCard } from "@/components/AdminCard";
 import Link from "next/link";
 
 export default function AdminDashboard() {
@@ -22,18 +22,20 @@ export default function AdminDashboard() {
   return (
     <DashboardLayout>
       <h1 className="text-2xl mb-6">Painel Administrativo</h1>
-      <p>
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quod in
-        dolorem delectus alias eaque, eos sit mollitia quisquam culpa ipsa,
-        dolore consequuntur suscipit doloremque inventore dolorum quae aut,
-        repellat temporibus.
-      </p>
+      <p className="text-left pb-6"><strong>
+        Este painel permite ao administrador controlar e organizar todos os
+        recursos da plataforma de forma centralizada. Aqui é possível criar e
+        gerenciar eventos, administrar usuários, moderar spots e revisar fotos,
+        garantindo a qualidade, a segurança e o bom funcionamento de toda a
+        aplicação.
+      </strong></p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <AdminCard title="Usuários" href="/dashboard/admin/users" />
-        <AdminCard title="Eventos" href="/dashboard/admin/events" />
+        <AdminCard title="Eventos" href="/dashboard/admin/events" />        
+        <AdminCard title="Moderação" href="/dashboard/admin/moderation" />        
         <AdminCard title="Spots" href="/dashboard/admin/spots" />
-        <AdminCard title="Moderação" href="/dashboard/admin/moderation" />
+        <AdminCard title="Usuários" href="/dashboard/admin/users" />
+        
       </div>
     </DashboardLayout>
   );

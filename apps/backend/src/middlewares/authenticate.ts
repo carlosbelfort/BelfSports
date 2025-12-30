@@ -6,7 +6,7 @@ export async function authenticate(
 ) {
   try {
     await request.jwtVerify();
-  } catch {
+  } catch (err) {
     return reply.status(401).send({
       message: "Não autorizado",
     });
