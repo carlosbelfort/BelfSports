@@ -13,7 +13,7 @@ type Event = {
   status?: string;
 };
 
-export default function OrganizerEventsPage() {
+export default function AdminEventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
 

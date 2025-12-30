@@ -7,15 +7,15 @@ import {
 } from "../controllers/adminEventsController";
 
 export async function adminRoutes(app: FastifyInstance) {
-  // 🔐 autenticação global
+  // autenticação global
   app.addHook("preHandler", ensureAuth);
 
-  // 🔒 somente ADMIN
+  // somente ADMIN
   app.addHook("preHandler", roleMiddleware(["ADMIN"]));
 
-  // 📋 listar todos os eventos
+  // listar todos os eventos
   app.get("/events", listEvents);
 
-  // 🗑 deletar evento
+  // deletar evento
   app.delete("/events/:id", deleteEvent);
 }

@@ -20,6 +20,7 @@ export default function Sidebar() {
         <>
           <Link href="/dashboard/admin">Dashboard</Link>
           <Link href="/dashboard/admin/events">Eventos</Link>
+          <Link href="/dashboard/admin/createEvent">Criar Evento</Link>
           <Link href="/dashboard/admin/moderation">Moderação</Link>
           <Link href="/dashboard/admin/spots">Spot</Link>
           <Link href="/dashboard/admin/users">Usuarios</Link>

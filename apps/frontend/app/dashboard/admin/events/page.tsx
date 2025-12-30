@@ -31,7 +31,40 @@ export default function AdminEventsPage() {
     } finally {
       setLoading(false);
     }
-  }  
+  }
+
+  async function handleCreateEvent() {
+    
+    const [title, setTitle] = useState("");
+    const [date, setDate] = useState("");
+    const [location, setLocation] = useState("");
+
+    if (!title || !date || !location) {
+      alert("Preencha título, data e Localização");
+      return;
+    }
+
+    try {
+      await api("/events", {
+        method: "POST",
+        body: JSON.stringify({
+          title,
+          date,
+          location,
+        }),
+      });
+
+      alert("Evento criado com sucesso!\nAguarde aprovação do Administrador.");
+
+      setTitle("");
+      setDate("");
+      setLocation("");
+
+      loadEvents(); // 🔄 atualiza lista
+    } catch (error) {
+      alert("Erro ao criar evento");
+    }
+  }
 
   async function handleDelete(id: string) {
     const confirmDelete = confirm(
