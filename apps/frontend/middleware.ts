@@ -17,9 +17,13 @@ export function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/", request.url));
     }
 
+    if (pathname.startsWith("/dashboard/organizer") && role !== "ORGANIZER") {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+
     if (
-      pathname.startsWith("/dashboard/organizer") &&
-      role !== "ORGANIZER"
+      pathname.startsWith("/dashboard/photographer") &&
+      role !== "PHOTOGRAPHER"
     ) {
       return NextResponse.redirect(new URL("/", request.url));
     }

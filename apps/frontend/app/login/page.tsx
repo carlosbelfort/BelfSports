@@ -36,8 +36,8 @@ export default function LoginPage() {
 
       console.log("LOGIN RESPONSE:", data);
 
-      document.cookie = `token=${data.token}; path=/`;
-      document.cookie = `role=${data.user.role}; path=/`;
+      document.cookie = `token=${data.token}; path=/; max-age=86400`;
+      document.cookie = `role=${data.user.role}; path=/; max-age=86400`;
 
       // Salva token e role
       localStorage.setItem("token", data.token);
