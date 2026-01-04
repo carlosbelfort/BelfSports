@@ -3,23 +3,20 @@ import { authenticate } from "../middlewares/authenticate";
 import roleMiddleware from "../middlewares/role.middleware";
 import { upload } from "../config/multer";
 import { uploadPhoto } from "../controllers/photo.controller";
+import { listSpots } from "../controllers/spot.list.controller";
 import {
   createSpot,
-  listSpots,
   updateSpotStatus,
-  deleteSpot,
-  listSpotsForOrganizer,
+  deleteSpot,  
 } from "../controllers/spotController";
 
 export async function spotsRoutes(app: FastifyInstance) {
   // Autenticação obrigatória para todas as rotas
   app.addHook("preHandler", authenticate);
 
-  // LISTAR TODOS (Admin)
+  // LISTAGEM DE SPOTS (ADMIN / ORGANIZER / PHOTOGRAPHER)
   app.get("/spots", listSpots);
-
-  // LISTAR DO ORGANIZER
-  app.get("/spots/organizer", listSpotsForOrganizer);
+  
 
   //Realiza Upload em spots de eventos aprovados
   app.post(

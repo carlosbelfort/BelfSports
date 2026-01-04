@@ -32,7 +32,8 @@ export default function Sidebar() {
           <Link href="/dashboard/organizer">Dashboard</Link>
           <Link href="/dashboard/organizer/listevents">Lista de Eventos</Link>
           <Link href="/dashboard/organizer/events">Criar Evento</Link>
-          <Link href="/dashboard/organizer/spots">Spots</Link>
+          <Link href="/dashboard/organizer/createSpot">Criar Spot</Link>
+          <Link href="/dashboard/organizer/spots">Lista de Spots</Link>
         </>
       )}
 

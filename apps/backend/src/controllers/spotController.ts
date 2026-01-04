@@ -1,11 +1,18 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { prisma } from "../lib/prisma";
 import { Role } from "@prisma/client";
+import { z } from "zod";
 
 
 //CREATE SPOT (Admin / Organizer)
 export async function createSpot(request: any, reply: any) {
-  const { eventId } = request.body;
+  const bodySchema = z.object({
+    eventId: z.string().uuid(),
+    name: z.string().min(3),
+    description: z.string().optional(),
+  });
+
+  const { eventId, name, description } = bodySchema.parse(request.body);
   const user = request.user;
 
   if (![Role.ADMIN, Role.ORGANIZER].includes(user.role)) {
@@ -21,7 +28,9 @@ export async function createSpot(request: any, reply: any) {
   }
 
   if (user.role === Role.ORGANIZER && event.status !== "APPROVED") {
-    return reply.status(400).send({ message: "Evento ainda não aprovado" });
+    return reply
+      .status(400)
+      .send({ message: "Evento ainda não aprovado" });
   }
 
   if (user.role === Role.ORGANIZER && event.userId !== user.id) {
@@ -32,8 +41,10 @@ export async function createSpot(request: any, reply: any) {
 
   const spot = await prisma.spot.create({
     data: {
-      eventId: event.id,
+      eventId,
       userId: user.id,
+      name,
+      description,
     },
   });
 
