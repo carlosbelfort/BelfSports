@@ -30,9 +30,11 @@ export default function AdminDashboard() {
       </strong></p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <AdminCard title="Eventos" href="/dashboard/admin/events" />        
-        <AdminCard title="Moderação" href="/dashboard/admin/moderation" />        
+        <AdminCard title="Eventos" href="/dashboard/admin/events" />  
+        <AdminCard title="Criar Eventos" href="/dashboard/admin/createEvent" />             
         <AdminCard title="Spots" href="/dashboard/admin/spots" />
+        <AdminCard title="Criar Spots" href="/dashboard/admin/createSpot" />
+        <AdminCard title="Moderação de Fotos" href="/dashboard/admin/moderation" />
         <AdminCard title="Usuários" href="/dashboard/admin/users" />
         
       </div>

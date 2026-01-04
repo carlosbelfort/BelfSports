@@ -74,7 +74,7 @@ export default function OrganizerDashboard() {
             title="Lista de Eventos"
             href="/dashboard/organizer/listevents"
           />
-          <AdminCard title="Criar evento" href="/dashboard/organizer/events" />
+          <AdminCard title="Criar Evento" href="/dashboard/organizer/events" />
 
           <AdminCard
             title="Criar Spot"
