@@ -1,16 +1,36 @@
-"use client";
-import SpotForm from "./SpotForm";
+'use client'
+import { api } from '@/lib/api'
+import { useState } from 'react'
 
-interface Props {
-  eventId?: string;
-  onUpload?: () => void;
+interface SpotUploadProps {
+  eventId: string
+  onUpload: () => void
 }
 
-export default function SpotUpload({ eventId, onUpload }: Props) {
+export default function SpotUpload({
+  eventId,
+  onUpload,
+}: SpotUploadProps) {
+  const [file, setFile] = useState<File | null>(null)
+
+  async function handleUpload() {
+    if (!file || !eventId) return
+
+    const formData = new FormData()
+    formData.append('image', file)
+
+    await api.postForm(`/spots/${eventId}/photos`, formData)
+
+    onUpload()
+  }
+
   return (
-    <div className="mt-4">
-      <h2 className="text-xl mb-2">Enviar Foto</h2>
-      <SpotForm eventId={eventId} onSuccess={onUpload} />
+    <div className="my-4">
+      <input
+        type="file"
+        onChange={(e) => setFile(e.target.files?.[0] || null)}
+      />
+      <button onClick={handleUpload}>Enviar foto</button>
     </div>
-  );
+  )
 }

@@ -15,7 +15,7 @@ export default function PhotographerSpotsPage() {
   }
 
   async function loadEvents() {
-    const data = await api("/photographer/events");
+    const data = await api("/events");
     setEvents(data);
   }
 

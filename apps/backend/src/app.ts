@@ -5,7 +5,7 @@ import multipart from "@fastify/multipart";
 import { authRoutes } from "./routes/auth.routes";
 import { eventRoutes } from "./routes/events.routes";
 import { spotsRoutes } from "./routes/spots.routes";
-import { uploadRoutes } from "./routes/upload.routes";
+import { uploadRoutes } from "./routes/photo.routes";
 import { moderationRoutes } from "./routes/moderation.routes";
 import { usersRoutes } from "./routes/users.routes";
 

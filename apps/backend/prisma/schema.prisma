@@ -14,54 +14,6 @@ enum Role {
   USER
 }
 
-model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  password  String
-  role      Role     @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  spots Spot[]
-  events Event[]
-
-}
-
-model Event {
-  id        String   @id @default(uuid())
-  title     String
-  location  String
-  date      DateTime  
-  status    EventStatus @default(PENDING)
-  createdAt DateTime @default(now())  
-
-  userId String
-  user   User @relation(fields: [userId], references: [id])
-
-  spots Spot[]
-}
-
-model Photo {
-  id        String   @id @default(uuid())
-  filename  String
-  approved  Boolean  @default(false)
-  createdAt DateTime @default(now())
-}
-
-model Spot {
-  id        String     @id @default(uuid())
-  imageUrl  String
-  status    SpotStatus @default(PENDING)
-  createdAt DateTime   @default(now())
-
-  eventId String
-  event   Event  @relation(fields: [eventId], references: [id])
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-}
-
 enum SpotStatus {
   PENDING
   APPROVED
@@ -72,4 +24,57 @@ enum EventStatus {
   PENDING
   APPROVED
   REJECTED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  spots  Spot[]
+  events Event[]
+}
+
+model Event {
+  id        String      @id @default(uuid())
+  title     String
+  location  String
+  date      DateTime
+  status    EventStatus @default(PENDING)
+  createdAt DateTime    @default(now())
+
+  userId String
+  user   User @relation(fields: [userId], references: [id])
+
+  spots Spot[]
+}
+
+model Spot {
+  id        String     @id @default(uuid())
+  imageUrl  String
+  status    SpotStatus @default(PENDING)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  photos Photo[]
+}
+
+model Photo {
+  id        String   @id @default(uuid())
+  filename  String
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  spotId String
+  spot   Spot @relation(fields: [spotId], references: [id])
 }

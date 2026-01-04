@@ -10,19 +10,14 @@ export default function OrganizerSpotsPage() {
   const [events, setEvents] = useState<any[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<string>("");
 
-  /*async function loadSpots() {
-    const data = await api("/spots");
-    setSpots(data);
-  }*/
-
   async function loadSpots() {
-    const data = await api("/spots/organizer"); // rota específica para Organizer
+    const data = await api("/spots/organizer");
     setSpots(Array.isArray(data) ? data : []);
   }
 
   async function loadEvents() {
-    const data = await api("/organizer/events");
-    setEvents(data);
+    const data = await api("/events");
+    setEvents(Array.isArray(data) ? data : []);
   }
 
   async function handleDelete(id: string) {
@@ -45,10 +40,11 @@ export default function OrganizerSpotsPage() {
           onChange={(e) => setSelectedEvent(e.target.value)}
           value={selectedEvent}
         >
-          <option value="">Selecione um evento</option>
-          {Array.isArray(events) &&
-            events.map((ev) => (
-              <option key={ev.id} value={ev.id}>
+          <option value="" className="text-black">Selecione um evento</option>
+          {events
+            .filter((ev) => ev.status === "APPROVED")
+            .map((ev) => (
+              <option className="text-black" key={ev.id} value={ev.id}>
                 {ev.title}
               </option>
             ))}

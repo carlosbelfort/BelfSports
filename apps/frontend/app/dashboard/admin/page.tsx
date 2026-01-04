@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import DashboardLayout from "@/components/DashboardLayout";
 import { AdminCard } from "@/components/AdminCard";
-import Link from "next/link";
 
 export default function AdminDashboard() {
   const { user, loading } = useAuth();
@@ -13,9 +12,9 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (!loading && (!user || user.role !== "ADMIN")) {
-      router.replace("/login");
+      router.push('/login');
     }
-  }, [user, loading, router]);
+  }, [user, loading]);
 
   if (loading) return null;
 

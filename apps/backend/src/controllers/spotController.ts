@@ -1,25 +1,41 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { prisma } from "../lib/prisma";
-import path from "path";
+import { validateEventOwnership } from "../utils/ownership";
 
 /**
- * CREATE SPOT (Admin / Organizer / Photographer)
+ * CREATE SPOT (Admin / Organizer)
  */
 export async function createSpot(req: FastifyRequest, reply: FastifyReply) {
   const user = req.user as any;
   const { eventId } = req.body as any;
   const file = (req as any).file;
 
+  // Photographer não cria spot
+  if (user.role === "PHOTOGRAPHER" || user.role === "USER") {
+    return reply.status(403).send({ message: "Não autorizado" });
+  }
+
   if (!file) {
     return reply.status(400).send({ message: "Arquivo não enviado" });
   }
 
-  // Organizer só pode criar spots em eventos dele
-  if (user.role === "ORGANIZER") {
-    const event = await prisma.event.findUnique({ where: { id: eventId } });
-    if (!event || event.userId !== user.id) {
-      return reply.status(403).send({ message: "Evento não autorizado" });
-    }
+  const event = await prisma.event.findUnique({
+    where: { id: eventId },
+  });
+
+  if (!event) {
+    return reply.status(404).send({ message: "Evento não encontrado" });
+  }
+
+  // ✅ Ownership + status
+  try {
+    validateEventOwnership({
+      user,
+      event,
+      requireApproved: user.role === "ORGANIZER",
+    });
+  } catch (err: any) {
+    return reply.status(403).send({ message: err.message });
   }
 
   const imageUrl = `/uploads/${file.filename}`;
@@ -28,7 +44,7 @@ export async function createSpot(req: FastifyRequest, reply: FastifyReply) {
     data: {
       imageUrl,
       eventId,
-      userId: user.id,
+      userId: user.sub,
     },
   });
 
@@ -47,15 +63,19 @@ export async function listSpots(req: FastifyRequest, reply: FastifyReply) {
     where = {
       event: { userId: user.id },
     };
-  } else if (user.role === "PHOTOGRAPHER") {
-    where = { userId: user.id };
+  }
+
+  if (user.role === "PHOTOGRAPHER" || user.role === "USER") {
+    where = {
+      event: { status: "APPROVED" },
+      status: "APPROVED",
+    };
   }
 
   const spots = await prisma.spot.findMany({
     where,
     include: {
       event: true,
-      user: { select: { name: true, email: true } },
     },
     orderBy: { createdAt: "desc" },
   });
@@ -66,19 +86,29 @@ export async function listSpots(req: FastifyRequest, reply: FastifyReply) {
 /**
  * ORGANIZER: listar apenas spots dos eventos dele
  */
-export async function listSpotsForOrganizer(req: Request, res: Response) {
-  const userId = req.user.id; // id do organizador logado
+export async function listSpotsForOrganizer(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  const user = request.user as { sub: string; role: string };
+
+  if (!user || user.role !== "ORGANIZER") {
+    return reply.status(403).send({ message: "Acesso negado" });
+  }
 
   const spots = await prisma.spot.findMany({
     where: {
       event: {
-        userId: userId, // apenas eventos do Organizer
+        userId: user.sub,
       },
     },
     include: {
       event: true,
       user: {
-        select: { name: true, email: true }, // info do fotógrafo
+        select: {
+          name: true,
+          email: true,
+        },
       },
     },
     orderBy: {
@@ -86,8 +116,9 @@ export async function listSpotsForOrganizer(req: Request, res: Response) {
     },
   });
 
-  return res.json(spots);
+  return reply.send(spots);
 }
+
 /**
  * UPDATE SPOT STATUS (ADMIN)
  */

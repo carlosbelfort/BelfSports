@@ -1,6 +1,8 @@
-import { prisma } from '../../prisma'
+import type { FastifyRequest, FastifyReply } from "fastify";
+import { prisma } from "../lib/prisma";
 
-export async function listUsers(req, res) {
+export async function listUsers( request: FastifyRequest,
+  reply: FastifyReply) {
   const users = await prisma.user.findMany({
     select: {
       id: true,
@@ -11,10 +13,11 @@ export async function listUsers(req, res) {
     }
   })
 
-  return res.json(users)
+  return reply.json(users)
 }
 
-export async function updateUserRole(req, res) {
+export async function updateUserRole(request: FastifyRequest,
+  reply: FastifyReply) {
   const { id } = req.params
   const { role } = req.body
 

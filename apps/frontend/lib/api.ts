@@ -14,7 +14,7 @@ export const api = async (endpoint: string, options?: RequestInit) => {
   };
 
   // Só define Content-Type se houver body
-  if (options?.body) {
+  if (options?.body && !(options.body instanceof FormData)) {
     headers["Content-Type"] = "application/json";
   }
 
@@ -48,4 +48,10 @@ api.patch = (endpoint: string, body?: any) =>
 api.delete = (endpoint: string) =>
   api(endpoint, {
     method: "DELETE",
+  });
+
+api.postForm = (endpoint: string, formData: FormData) =>
+  api(endpoint, {
+    method: "POST",
+    body: formData,
   });

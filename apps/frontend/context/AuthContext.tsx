@@ -1,77 +1,65 @@
-'use client'
+"use client";
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from "react";
 
 interface User {
-  id: string
-  role: 'ADMIN' | 'ORGANIZER' | 'USER' | 'PHOTOGRAPHER'
+  id: string;
+  role: "ADMIN" | "ORGANIZER" | "USER" | "PHOTOGRAPHER";
 }
 
 interface AuthContextType {
-  user: User | null
-  loading: boolean
-  login: (data: { id: string; role: User['role'] }) => void
-  logout: () => void
+  user: User | null;
+  loading: boolean;
+  login: (data: { id: string; role: User["role"]; token: string }) => void;
+  logout: () => void;
 }
 
-const AuthContext = createContext<AuthContextType>({} as AuthContextType)
+const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true) 
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    const role = localStorage.getItem('role')
-    const userId = localStorage.getItem('userId')
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    const userId = localStorage.getItem("userId");
 
     if (token && role && userId) {
       setUser({
         id: userId,
-        role: role as User['role'],
-      })
+        role: role as User["role"],
+      });
     }
 
-    setLoading(false) 
-  }, [])
+    setLoading(false);
+  }, []);
 
-  // ============================
-  // Funções de auth
-  // ============================
-  function login(data: { id: string; role: User['role'] }) {
+  function login(data: { id: string; role: User["role"]; token: string }) {
     setUser({
       id: data.id,
       role: data.role,
-    })
+    });
+
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("role", data.role);
+    localStorage.setItem("userId", data.id);
   }
 
   function logout() {
-    setUser(null)
-
-    // limpa storage
-    localStorage.clear()
-
-    // limpa cookies (middleware)
-    document.cookie = 'token=; path=/; max-age=0'
-    document.cookie = 'role=; path=/; max-age=0'
+    setUser(null);
+    localStorage.clear();
+    document.cookie = "token=; path=/; max-age=0";
+    document.cookie = "role=; path=/; max-age=0";
   }
 
   return (
-    
-    <AuthContext.Provider
-      value={{
-        user,
-        loading,
-        login,
-        logout,
-      }}
-    >
+    <AuthContext.Provider value={{ user, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
-  )
+  );
 }
 
 export function useAuth() {
-  return useContext(AuthContext)
+  return useContext(AuthContext);
 }
