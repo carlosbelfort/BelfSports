@@ -18,9 +18,8 @@ export default function SpotForm({ eventId, onSuccess }: Props) {
     formData.append("image", file);
     if (eventId) formData.append("eventId", eventId);
 
-    await api("/spots", {
-      method: "POST",
-      body: formData,
+    await api.post("/spots", {
+      eventId,
     });
 
     setFile(null);
@@ -29,8 +28,13 @@ export default function SpotForm({ eventId, onSuccess }: Props) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-      <input type="file" onChange={(e) => e.target.files && setFile(e.target.files[0])} />
-      <button type="submit" className="bg-blue-500 text-white p-2 rounded">Enviar Spot</button>
+      <input
+        type="file"
+        onChange={(e) => e.target.files && setFile(e.target.files[0])}
+      />
+      <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+        Enviar Spot
+      </button>
     </form>
   );
 }

@@ -59,7 +59,7 @@ export default function OrganizerDashboard() {
   return (
     <DashboardLayout>
       <main className="p-6">
-        <h1 className="text-2xl mb-6">Painel Administrativo</h1>
+        <h1 className="text-2xl mb-6">Painel do Organizador</h1>
         <p className="text-left pb-6">
           <strong>
             Este painel permite ao organizador controlar e organizar os recursos

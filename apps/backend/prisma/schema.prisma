@@ -55,7 +55,6 @@ model Event {
 
 model Spot {
   id        String     @id @default(uuid())
-  imageUrl  String
   status    SpotStatus @default(PENDING)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt

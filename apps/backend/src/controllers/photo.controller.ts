@@ -1,20 +1,11 @@
-import type { FastifyReply, FastifyRequest } from "fastify";
 import { prisma } from "../lib/prisma";
 
-export async function uploadPhoto(
-  req: FastifyRequest,
-  reply: FastifyReply
-) {
-  const user = req.user as any;
-  const { id: spotId } = req.params as any;
-  const file = (req as any).file;
-
-  if (user.role !== "PHOTOGRAPHER") {
-    return reply.status(403).send({ message: "Apenas fotógrafos podem enviar fotos" });
-  }
+export async function uploadPhoto(request: any, reply: any) {
+  const { id: spotId } = request.params;
+  const file = request.file;
 
   if (!file) {
-    return reply.status(400).send({ message: "Arquivo não enviado" });
+    return reply.status(400).send({ message: "Imagem obrigatória" });
   }
 
   const spot = await prisma.spot.findUnique({
@@ -27,13 +18,15 @@ export async function uploadPhoto(
   }
 
   if (spot.event.status !== "APPROVED") {
-    return reply.status(403).send({ message: "Evento não aprovado" });
+    return reply
+      .status(400)
+      .send({ message: "Evento não aprovado" });
   }
 
   const photo = await prisma.photo.create({
     data: {
       filename: file.filename,
-      spotId,
+      spotId: spot.id,
     },
   });
 

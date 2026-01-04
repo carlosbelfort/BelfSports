@@ -24,12 +24,21 @@ export async function spotsRoutes(app: FastifyInstance) {
   //Realiza Upload em spots de eventos aprovados
   app.post(
     "/spots/:id/photos",
-    { preHandler: upload.single("image") },
+    {
+      preHandler: [
+        roleMiddleware(["ADMIN", "PHOTOGRAPHER"]),
+        upload.single("image"),
+      ],
+    },
     uploadPhoto
   );
 
-  // CRIAR SPOT (com upload)
-  app.post("/spots", { preHandler: upload.single("image") }, createSpot);
+  // CRIAR SPOT (ADMIN // ORGANIZER)
+  app.post(
+    "/spots",
+    { preHandler: roleMiddleware(["ADMIN", "ORGANIZER"]) },
+    createSpot
+  );
 
   // ATUALIZAR STATUS (apenas Admin)
   app.patch(

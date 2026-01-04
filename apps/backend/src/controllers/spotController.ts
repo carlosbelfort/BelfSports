@@ -1,22 +1,15 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { prisma } from "../lib/prisma";
-import { validateEventOwnership } from "../utils/ownership";
+import { Role } from "@prisma/client";
 
-/**
- * CREATE SPOT (Admin / Organizer)
- */
-export async function createSpot(req: FastifyRequest, reply: FastifyReply) {
-  const user = req.user as any;
-  const { eventId } = req.body as any;
-  const file = (req as any).file;
 
-  // Photographer não cria spot
-  if (user.role === "PHOTOGRAPHER" || user.role === "USER") {
-    return reply.status(403).send({ message: "Não autorizado" });
-  }
+//CREATE SPOT (Admin / Organizer)
+export async function createSpot(request: any, reply: any) {
+  const { eventId } = request.body;
+  const user = request.user;
 
-  if (!file) {
-    return reply.status(400).send({ message: "Arquivo não enviado" });
+  if (![Role.ADMIN, Role.ORGANIZER].includes(user.role)) {
+    return reply.status(403).send({ message: "Acesso negado" });
   }
 
   const event = await prisma.event.findUnique({
@@ -27,24 +20,20 @@ export async function createSpot(req: FastifyRequest, reply: FastifyReply) {
     return reply.status(404).send({ message: "Evento não encontrado" });
   }
 
-  // ✅ Ownership + status
-  try {
-    validateEventOwnership({
-      user,
-      event,
-      requireApproved: user.role === "ORGANIZER",
-    });
-  } catch (err: any) {
-    return reply.status(403).send({ message: err.message });
+  if (user.role === Role.ORGANIZER && event.status !== "APPROVED") {
+    return reply.status(400).send({ message: "Evento ainda não aprovado" });
   }
 
-  const imageUrl = `/uploads/${file.filename}`;
+  if (user.role === Role.ORGANIZER && event.userId !== user.id) {
+    return reply
+      .status(403)
+      .send({ message: "Evento não pertence ao organizer" });
+  }
 
   const spot = await prisma.spot.create({
     data: {
-      imageUrl,
-      eventId,
-      userId: user.sub,
+      eventId: event.id,
+      userId: user.id,
     },
   });
 
@@ -122,7 +111,10 @@ export async function listSpotsForOrganizer(
 /**
  * UPDATE SPOT STATUS (ADMIN)
  */
-export async function updateSpotStatus(req: FastifyRequest, reply: FastifyReply) {
+export async function updateSpotStatus(
+  req: FastifyRequest,
+  reply: FastifyReply
+) {
   const { id } = req.params as any;
   const { status } = req.body as any;
 
