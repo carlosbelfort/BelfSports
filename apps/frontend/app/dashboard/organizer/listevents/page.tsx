@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { api } from "@/lib/api";
 import DashboardLayout from "@/components/DashboardLayout";
-import { AdminCard } from "@/components/AdminCard";
 
 type Event = {
   id: string;
@@ -58,25 +57,28 @@ export default function OrganizerDashboard() {
 
   return (
     <DashboardLayout>
-      <main className="p-6">
-        <h1 className="text-2xl mb-6">Painel Administrativo</h1>
-        <p className="text-left pb-6">
-          <strong>
-            Este painel permite ao organizador controlar e organizar os recursos
-            da plataforma de forma centralizada. Aqui é possível listar e criar
-            eventos, moderar spots de eventos aprovados, garantindo a qualidade,
-            a segurança e o bom funcionamento de toda a aplicação.
-          </strong>
-        </p>
+      <main className="p-6">       
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <AdminCard title="Criar evento" href="/dashboard/organizer/events" />
-          <AdminCard
-            title="Lista de Eventos"
-            href="/dashboard/organizer/listevents"
-          />
-          <AdminCard title="Spots" href="/dashboard/organizer/spots" />          
-        </div>
+        <h1 className="text-2xl mb-6">Meus Eventos</h1>
+
+        {events.length === 0 ? (
+          <p className="text-zinc-400">Nenhum evento criado ainda.</p>
+        ) : (
+          <ul>
+            {events.map((event) => (
+              <li key={event.id} className="mb-3 border-b border-zinc-800 pb-2">
+                <strong>{event.title}</strong> —{" "}
+                {new Date(event.date).toLocaleDateString()} —{" "}
+                {event.location}
+                {event.status && (
+                  <span className="ml-2 text-sm text-zinc-400">
+                    ({event.status})
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
       </main>
     </DashboardLayout>
   );
