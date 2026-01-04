@@ -15,7 +15,14 @@ export async function spotsRoutes(app: FastifyInstance) {
   app.addHook("preHandler", authenticate);
 
   // LISTAGEM DE SPOTS (ADMIN / ORGANIZER / PHOTOGRAPHER)
-  app.get("/spots", listSpots);
+  //app.get("/spots", listSpots);
+  app.get(
+    "/spots",
+    {
+      preHandler: [authenticate],
+    },
+    listSpots
+  );
   
 
   //Realiza Upload em spots de eventos aprovados

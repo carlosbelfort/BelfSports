@@ -40,6 +40,8 @@ export default function Sidebar() {
       {user.role === 'PHOTOGRAPHER' && (
         <>
           <Link href="/dashboard/photographer">Dashboard</Link>
+          <Link href="/dashboard/photographer/spots">Spots</Link>
+          <Link href="/dashboard/photographer/listUploads">Lista de uploads</Link>
           <Link href="/dashboard/photographer/upload">Upload de Foto</Link>
         </>
       )}

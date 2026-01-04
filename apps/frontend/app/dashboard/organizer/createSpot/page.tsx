@@ -79,7 +79,7 @@ export default function CreateSpotPage() {
           >
             <option value="">Selecione um evento aprovado</option>
             {events.map((event) => (
-              <option key={event.id} value={event.id} className="text-black">
+              <option key={event.id} value={event.id} className="text-zinc-400">
                 {event.title}
               </option>
             ))}

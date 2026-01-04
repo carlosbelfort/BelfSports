@@ -70,13 +70,17 @@ export default function OrganizerDashboard() {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <AdminCard title="Criar evento" href="/dashboard/organizer/events" />
           <AdminCard
             title="Lista de Eventos"
             href="/dashboard/organizer/listevents"
           />
-          <AdminCard title="Criar Spot" href="/dashboard/organizer/createSpot" />
-          <AdminCard title="Lista de Spots" href="/dashboard/organizer/spots" />          
+          <AdminCard title="Criar evento" href="/dashboard/organizer/events" />
+
+          <AdminCard
+            title="Criar Spot"
+            href="/dashboard/organizer/createSpot"
+          />
+          <AdminCard title="Lista de Spots" href="/dashboard/organizer/spots" />
         </div>
       </main>
     </DashboardLayout>

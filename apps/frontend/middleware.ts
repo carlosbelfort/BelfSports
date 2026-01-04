@@ -7,9 +7,9 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
   const role = request.cookies.get("role")?.value;
 
-  // 🔒 Proteção geral
+  // Proteção geral
   if (pathname.startsWith("/dashboard")) {
-    if (!token) {
+    if (!token || !role) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
 

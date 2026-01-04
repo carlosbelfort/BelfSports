@@ -4,12 +4,11 @@ declare module "fastify" {
   interface FastifyRequest {
     user: {
       sub: string;
-      role: string;
-      email?: string;
+      role: "ADMIN" | "ORGANIZER" | "PHOTOGRAPHER" | "USER";
     };
   }
 
-   interface FastifyInstance {
+  interface FastifyInstance {
     authenticate: any;
   }
 }
