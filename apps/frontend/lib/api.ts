@@ -21,6 +21,7 @@ export const api = async (endpoint: string, options?: RequestInit) => {
   const response = await fetch(`${API_URL}${endpoint}`, {
     ...options,
     headers,
+    credentials: "include",
   });
 
   // DELETE 204 não tem body
