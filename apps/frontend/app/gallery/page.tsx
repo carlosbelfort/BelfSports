@@ -1,20 +1,32 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { api } from '@/lib/api'
+import { useEffect, useState } from "react";
 
-export default function GalleryPage() {
-  const [spots, setSpots] = useState([])
+export default function PublicGallery() {
+  const [photos, setPhotos] = useState<any[]>([]);
 
   useEffect(() => {
-    api('/spots/approved').then(res => setSpots(res.data))
-  }, [])
+    fetch("http://localhost:3333/gallery")
+      .then((res) => res.json())
+      .then(setPhotos);
+  }, []);
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-      {spots.map((spot: any) => (
-        <img key={spot.id} src={spot.imageUrl} className="rounded" />
-      ))}
+    <div>
+      <h1>Galeria Pública</h1>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>
+        {photos.map((photo) => (
+          <div key={photo.id}>
+            <img
+              src={`http://localhost:3333/uploads/${photo.filename}`}
+              width={250}
+            />
+            <p>{photo.spot.event.title}</p>
+            <small>{photo.spot.name}</small>
+          </div>
+        ))}
+      </div>
     </div>
-  )
+  );
 }

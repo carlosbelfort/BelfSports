@@ -1,25 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
-import DashboardLayout from "@/components/DashboardLayout";
 import { AdminCard } from "@/components/AdminCard";
 
-export default function AdminDashboard() {
-  const { user, loading } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!loading && (!user || user.role !== "ADMIN")) {
-      router.push('/login');
-    }
-  }, [user, loading]);
-
-  if (loading) return null;
+export default function AdminDashboard() {  
 
   return (
-    <DashboardLayout>
+    <div>
       <h1 className="text-2xl mb-6">Painel Administrativo</h1>
       <p className="text-left pb-6"><strong>
         Este painel permite ao administrador controlar e organizar todos os
@@ -34,10 +20,13 @@ export default function AdminDashboard() {
         <AdminCard title="Criar Eventos" href="/dashboard/admin/createEvent" />             
         <AdminCard title="Spots" href="/dashboard/admin/spots" />
         <AdminCard title="Criar Spots" href="/dashboard/admin/createSpot" />
+        <AdminCard title="Uploads" href="/dashboard/upload" />
         <AdminCard title="Moderação de Fotos" href="/dashboard/admin/moderation" />
         <AdminCard title="Usuários" href="/dashboard/admin/users" />
         
       </div>
-    </DashboardLayout>
+
+       </div>
+    
   );
 }

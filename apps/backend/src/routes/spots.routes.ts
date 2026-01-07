@@ -8,6 +8,4 @@ export async function spotsRoutes(app: FastifyInstance) {
   app.post("/", createSpot);
   app.get("/", listSpots);
 
-  // Upload de foto (fotógrafo / admin)
-  app.post("/:spotId/photos", uploadPhoto);
 }
