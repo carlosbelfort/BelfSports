@@ -19,7 +19,7 @@ export default function OrganizerEventsPage() {
 
   async function loadMyEvents() {
     try {
-      const data = await api.get("/events");
+      const data = await api.get("/organizer/events");
       setEvents(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error(error);

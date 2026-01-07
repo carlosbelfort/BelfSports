@@ -32,7 +32,7 @@ export async function listMyEvents(
       status: "APPROVED",
     },
     orderBy: { date: "asc" },
-  });
+  });  
 
   return reply.send(events);
 }

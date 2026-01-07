@@ -11,6 +11,7 @@ import { eventRoutes } from "./routes/events.routes";
 import { adminRoutes } from "./routes/admin.routes";
 import { spotsRoutes } from "./routes/spots.routes";
 import { photosRoutes } from "./routes/photos.routes";
+import { organizerRoutes } from "./routes/organizer.routes";
 
 // Middleware
 import { authenticate } from "./middlewares/authenticate";
@@ -35,7 +36,6 @@ await app.register(cors, {
 await app.register(jwt, {
   secret: process.env.JWT_SECRET ?? "supersecret",
 });
-
 
 // REGISTRA O MULTER
 app.register(multer.contentParser);
@@ -62,8 +62,10 @@ app.register(async (protectedRoutes) => {
   protectedRoutes.register(eventRoutes, { prefix: "/events" });
   protectedRoutes.register(spotsRoutes, { prefix: "/spots" });
   protectedRoutes.register(photosRoutes, { prefix: "/photos" });
-  protectedRoutes.register(adminRoutes, { prefix: "/admin" });
+  protectedRoutes.register(adminRoutes, { prefix: "/admin" });  
 });
+
+app.register(organizerRoutes, { prefix: "/organizer" });
 
 // SERVE UPLOADS
 app.register(fastifyStatic, {
