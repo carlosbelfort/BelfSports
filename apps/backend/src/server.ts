@@ -25,8 +25,9 @@ export const app = Fastify({
 
 // CORS
 await app.register(cors, {
-  origin: ["http://localhost:3000"],
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+  origin: "http://localhost:3000",
+  credentials: true,
+  methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 });
 

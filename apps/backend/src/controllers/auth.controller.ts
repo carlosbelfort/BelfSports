@@ -1,6 +1,7 @@
-import type { FastifyRequest, FastifyReply } from "fastify";
-import { prisma } from "../lib/prisma";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { prisma } from "../lib/prisma";
+import type { FastifyRequest, FastifyReply } from "fastify";
 
 export async function login(
   request: FastifyRequest,
@@ -15,7 +16,7 @@ export async function login(
     where: { email },
   });
 
-  if (!user || !user.active) {
+  if (!user) {
     return reply.status(401).send({ message: "Credenciais inválidas" });
   }
 
@@ -25,11 +26,17 @@ export async function login(
     return reply.status(401).send({ message: "Credenciais inválidas" });
   }
 
-  const token = reply.jwtSign({
-    sub: user.id,
-    role: user.role,
-    name: user.name,
-  });
+  const token = jwt.sign(
+    { sub: user.id, role: user.role },
+    process.env.JWT_SECRET!,
+    { expiresIn: "1d" }
+  );
 
-  return reply.send({ token });
+  return reply.send({
+    token,
+    user: {
+      id: user.id,
+      role: user.role,
+    },
+  });
 }

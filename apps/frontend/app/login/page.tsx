@@ -22,31 +22,33 @@ export default function LoginPage() {
     try {
       const response = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
         body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) {
-        throw new Error("Credenciais inválidas");
+        const err = await response.json();
+        throw new Error(err.message || "Credenciais inválidas");
       }
 
       const data = await response.json();
 
-      // ✅ Cookies (middleware)
-      document.cookie = `token=${data.token}; path=/; max-age=86400`;
-      document.cookie = `role=${data.user.role}; path=/; max-age=86400`;
-
-      // ✅ Estado global
+      //Estado global (não guarda token duplicado)
       login({
         id: data.user.id,
         role: data.user.role,
         token: data.token,
       });
 
-      // ⏳ Aguarda o browser persistir cookies
-      setTimeout(() => {
-        router.push(`/dashboard/${data.user.role.toLowerCase()}`);
-      }, 100);
+      // depois de receber `data`
+
+      document.cookie = `token=${data.token}; path=/; max-age=86400`;
+      document.cookie = `role=${data.user.role}; path=/; max-age=86400`;
+
+      router.push(`/dashboard/${data.user.role.toLowerCase()}`);
     } catch (err: any) {
       setError(err.message);
     } finally {

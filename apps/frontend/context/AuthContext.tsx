@@ -21,8 +21,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const role = localStorage.getItem("role");
+    const cookies = Object.fromEntries(
+      document.cookie.split("; ").map((c) => c.split("="))
+    );
+
+    const token = cookies.token;
+    const role = cookies.role;
     const userId = localStorage.getItem("userId");
 
     if (token && role && userId) {
