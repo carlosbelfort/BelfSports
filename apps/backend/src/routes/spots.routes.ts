@@ -1,56 +1,13 @@
 import type { FastifyInstance } from "fastify";
-import { authenticate } from "../middlewares/authenticate";
-import roleMiddleware from "../middlewares/role.middleware";
-import { upload } from "../config/multer";
-import { uploadPhoto } from "../controllers/photo.controller";
-import { listSpots } from "../controllers/spot.list.controller";
-import {
-  createSpot,
-  updateSpotStatus,
-  deleteSpot,  
-} from "../controllers/spotController";
+import { createSpot } from "../controllers/spots.controller";
+import { listSpots } from "../controllers/spots.list.controller";
+
+import { uploadPhoto } from "../controllers/photos.upload.controller";
 
 export async function spotsRoutes(app: FastifyInstance) {
-  // Autenticação obrigatória para todas as rotas
-  app.addHook("preHandler", authenticate);
+  app.post("/", createSpot);
+  app.get("/", listSpots);
 
-  // LISTAGEM DE SPOTS (ADMIN / ORGANIZER / PHOTOGRAPHER)
-  //app.get("/spots", listSpots);
-  app.get(
-    "/spots",
-    {
-      preHandler: [authenticate],
-    },
-    listSpots
-  );
-  
-
-  //Realiza Upload em spots de eventos aprovados
-  app.post(
-    "/spots/:id/photos",
-    {
-      preHandler: [
-        roleMiddleware(["ADMIN", "PHOTOGRAPHER"]),
-        upload.single("image"),
-      ],
-    },
-    uploadPhoto
-  );
-
-  // CRIAR SPOT (ADMIN // ORGANIZER)
-  app.post(
-    "/spots",
-    { preHandler: roleMiddleware(["ADMIN", "ORGANIZER"]) },
-    createSpot
-  );
-
-  // ATUALIZAR STATUS (apenas Admin)
-  app.patch(
-    "/spots/:id/status",
-    { preHandler: roleMiddleware(["ADMIN"]) },
-    updateSpotStatus
-  );
-
-  // DELETE (apenas Admin ou Organizer dono do spot)
-  app.delete("/spots/:id", deleteSpot);
+  // Upload de foto (fotógrafo / admin)
+  app.post("/:spotId/photos", uploadPhoto);
 }

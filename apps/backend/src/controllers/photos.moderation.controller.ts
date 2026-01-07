@@ -2,34 +2,32 @@ import type { FastifyRequest, FastifyReply } from "fastify";
 import { prisma } from "../lib/prisma";
 
 export async function listPendingPhotos(
-  req: FastifyRequest,
+  request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const user = req.user as any;
+  const user = request.user;
 
   const where =
     user.role === "ADMIN"
       ? { approved: false }
       : {
           approved: false,
-          spot: { event: { userId: user.id } },
+          spot: { event: { userId: user.sub } },
         };
 
   const photos = await prisma.photo.findMany({
     where,
-    include: {
-      spot: { include: { event: true } },
-    },
+    include: { spot: { include: { event: true } } },
   });
 
   return reply.send(photos);
 }
 
 export async function approvePhoto(
-  req: FastifyRequest,
+  request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const { id } = req.params as any;
+  const { id } = request.params as { id: string };
 
   await prisma.photo.update({
     where: { id },
@@ -40,10 +38,10 @@ export async function approvePhoto(
 }
 
 export async function rejectPhoto(
-  req: FastifyRequest,
+  request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const { id } = req.params as any;
+  const { id } = request.params as { id: string };
 
   await prisma.photo.delete({ where: { id } });
 

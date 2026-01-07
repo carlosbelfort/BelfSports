@@ -1,12 +1,7 @@
-import { Router } from 'express';
+import type { FastifyInstance } from "fastify";
 
-const router = Router();
-
-router.get('/health', (req, res) => {
-  return res.json({
-    status: 'ok',
-    message: 'API BelfSports funcionando'
+export async function healthRoutes(app: FastifyInstance) {
+  app.get("/health", async () => {
+    return { status: "ok" };
   });
-});
-
-export default router;
+}

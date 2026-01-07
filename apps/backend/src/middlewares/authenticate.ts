@@ -5,20 +5,10 @@ export async function authenticate(
   reply: FastifyReply
 ) {
   try {
-    const decoded = await request.jwtVerify<{
-      sub: string;
-      role: string;
-      email?: string;
-    }>();
-
-    request.user = {
-      id: decoded.sub,
-      role: decoded.role,
-      email: decoded.email,
-    };
+    await request.jwtVerify();
   } catch (err) {
     return reply.status(401).send({
-      message: "Não autorizado",
+      message: "Token inválido ou não fornecido",
     });
   }
 }
