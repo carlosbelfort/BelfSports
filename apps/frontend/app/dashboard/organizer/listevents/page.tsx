@@ -1,85 +1,81 @@
 "use client";
+
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
 import { api } from "@/lib/api";
 import DashboardLayout from "@/components/DashboardLayout";
+import Card from "@/components/Card";
 
 type Event = {
   id: string;
   title: string;
   date: string;
   location: string;
-  status?: string;
+  status: "PENDING" | "APPROVED" | "REJECTED";
 };
 
-export default function OrganizerDashboard() {
+export default function OrganizerEventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
-  const { user, loading } = useAuth();
-  const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (loading) return;
-
-    if (!user || user.role !== "ORGANIZER") {
-      router.push("/login");
-    }
-  }, [user, loading, router]);
-
-  async function loadEvents() {
+  async function loadMyEvents() {
     try {
-      const res = await api("/events");
-
-      if (Array.isArray(res)) {
-        setEvents(res);
-      } else {
-        setEvents([]);
-      }
+      const data = await api.get("/events");
+      setEvents(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error(error);
       setEvents([]);
+    } finally {
+      setLoading(false);
     }
   }
 
   useEffect(() => {
-    if (!loading && user?.role === "ORGANIZER") {
-      loadEvents();
-    }
-  }, [loading, user]);
+    loadMyEvents();
+  }, []);
 
   if (loading) {
-    return (
-      <DashboardLayout>
-        <p className="p-6">Carregando...</p>
-      </DashboardLayout>
-    );
+    return <p className="text-white">Carregando seus eventos...</p>;
   }
 
   return (
     <DashboardLayout>
-      <main className="p-6">       
-
+      <Card>
         <h1 className="text-2xl mb-6">Meus Eventos</h1>
 
-        {events.length === 0 ? (
-          <p className="text-zinc-400">Nenhum evento criado ainda.</p>
-        ) : (
-          <ul>
-            {events.map((event) => (
-              <li key={event.id} className="mb-3 border-b border-zinc-800 pb-2">
-                <strong>{event.title}</strong> —{" "}
-                {new Date(event.date).toLocaleDateString()} —{" "}
-                {event.location}
-                {event.status && (
-                  <span className="ml-2 text-sm text-zinc-400">
-                    ({event.status})
-                  </span>
-                )}
-              </li>
-            ))}
-          </ul>
+        {events.length === 0 && (
+          <p className="text-zinc-400">
+            Você ainda não cadastrou nenhum evento.
+          </p>
         )}
-      </main>
+
+        <div className="space-y-4">
+          {events.map((event) => (
+            <div
+              key={event.id}
+              className="border border-zinc-800 p-4 rounded"
+            >
+              <p className="font-bold text-lg">{event.title}</p>
+
+              <p className="text-sm text-zinc-400">
+                {event.location} —{" "}
+                {new Date(event.date).toLocaleDateString()}
+              </p>
+
+              <p
+                className={`text-sm mt-2 font-medium ${
+                  event.status === "APPROVED"
+                    ? "text-green-500"
+                    : event.status === "PENDING"
+                    ? "text-yellow-500"
+                    : "text-red-500"
+                }`}
+              >
+                Status: {event.status}
+              </p>
+            </div>
+          ))}
+        </div>
+      </Card>
     </DashboardLayout>
   );
 }

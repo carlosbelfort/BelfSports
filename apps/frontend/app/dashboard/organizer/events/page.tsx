@@ -1,115 +1,101 @@
+
+
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import DashboardLayout from "@/components/DashboardLayout";
 import Card from "@/components/Card";
 
-type Event = {
-  id: string;
-  title: string;
-  date: string;
-  location: string;
-  status?: string;
-};
-
-export default function OrganizerEventsPage() {
-  const [events, setEvents] = useState<Event[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function CreateEventPage() {
+  const router = useRouter();
 
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
   const [location, setLocation] = useState("");
 
-  async function loadEvents() {
-    try {
-      const res = await api("/events");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-      setEvents(Array.isArray(res) ? res : []);
-    } catch (error) {
-      console.error(error);
-      setEvents([]);
+  async function handleCreateEvent() {
+    setError("");
+
+    if (!title || !date || !location) {
+      setError("Preencha todos os campos.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      await api.post("/events", {
+        title,
+        date,
+        location,
+      });
+
+      alert(
+        "Evento criado com sucesso!\nEle ficará pendente até aprovação do administrador."
+      );
+
+      // limpa formulário
+      setTitle("");
+      setDate("");
+      setLocation("");
+
+      // redireciona para lista de eventos do usuário
+      router.push("/dashboard");
+    } catch (err: any) {
+      console.error(err);
+      setError("Erro ao criar evento. Tente novamente.");
     } finally {
       setLoading(false);
     }
   }
 
-  async function handleCreateEvent() {
-    if (!title || !date || !location) {
-      alert("Preencha título, data e Localização");
-      return;
-    }
-
-    try {
-      await api("/events", {
-        method: "POST",
-        body: JSON.stringify({
-          title,
-          date,
-          location,
-        }),
-      });
-
-      alert("Evento criado com sucesso!\nAguarde aprovação do Administrador.");
-
-      setTitle("");
-      setDate("");
-      setLocation("");
-
-      loadEvents(); // 🔄 atualiza lista
-    } catch (error) {
-      alert("Erro ao criar evento");
-    }
-  }
-
-  useEffect(() => {
-    loadEvents();
-  }, []);
-
-  if (loading) {
-    return <p>Carregando eventos...</p>;
-  }
-
   return (
     <DashboardLayout>
-      <div>
-        <Card>
-          {/* 🔹 FORMULÁRIO */}
-          <div className="mb-8 border border-zinc-800 p-4 rounded">
-            <h1 className="text-2xl mb-6">Criar novo evento</h1>
+      <Card>
+        <h1 className="text-2xl mb-6">Criar novo evento</h1>
 
-            <input
-              type="text"
-              placeholder="Título do evento"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="block mb-3 w-full p-2 bg-zinc-900 border border-zinc-800 rounded"
-            />
+        <div className="space-y-4 max-w-xl">
+          <input
+            type="text"
+            placeholder="Título do evento"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full p-3 bg-zinc-900 border border-zinc-800 rounded"
+          />
 
-            <input
-              type="text"
-              placeholder="Localização do evento"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              className="block mb-3 w-full p-2 bg-zinc-900 border border-zinc-800 rounded"
-            />
+          <input
+            type="text"
+            placeholder="Localização do evento"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            className="w-full p-3 bg-zinc-900 border border-zinc-800 rounded"
+          />
 
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="block mb-4 p-2 bg-zinc-900 border border-zinc-800 rounded"
-            />
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="p-3 bg-zinc-900 border border-zinc-800 rounded"
+          />
 
-            <button
-              onClick={handleCreateEvent}
-              className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded"
-            >
-              Criar Evento
-            </button>
-          </div>
-        </Card>
-      </div>
+          {error && (
+            <p className="text-red-500 text-sm font-medium">{error}</p>
+          )}
+
+          <button
+            onClick={handleCreateEvent}
+            disabled={loading}
+            className="bg-green-600 hover:bg-green-700 transition px-6 py-3 rounded font-semibold disabled:opacity-60"
+          >
+            {loading ? "Criando..." : "Criar Evento"}
+          </button>
+        </div>
+      </Card>
     </DashboardLayout>
   );
 }
