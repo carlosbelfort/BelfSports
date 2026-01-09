@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
+import { Button } from "@/components/Button";
 
 type Event = {
   id: string;
@@ -86,20 +87,17 @@ export default function AdminEventsPage() {
 
             <div className="flex gap-2">
               {event.status === "PENDING" && (
-                <button
+                <Button
+                  variant="success"
                   onClick={() => handleApprove(event.id)}
-                  className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm"
                 >
                   Aprovar
-                </button>
+                </Button>
               )}
 
-              <button
-                onClick={() => handleDelete(event.id)}
-                className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm"
-              >
+              <Button variant="danger" onClick={() => handleDelete(event.id)}>
                 Excluir
-              </button>
+              </Button>
             </div>
           </div>
         ))}

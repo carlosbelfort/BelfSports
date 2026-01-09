@@ -19,6 +19,8 @@ export default function OrganizerDashboard() {
         <AdminCard title="Criar Evento" href="/dashboard/organizer/events" />
         <AdminCard title="Criar Spot" href="/dashboard/organizer/createSpot" />
         <AdminCard title="Lista de Spots" href="/dashboard/organizer/spots" />
+        <AdminCard title="Moderação de Fotos" href="/dashboard/moderation" />
+        <AdminCard title="Galeria" href="../gallery" />
       </div>
     </div>
   );

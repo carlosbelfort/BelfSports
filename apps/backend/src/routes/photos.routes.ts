@@ -30,7 +30,7 @@ export async function uploadRoutes(app: FastifyInstance) {
 }*/
 
 import type { FastifyInstance } from "fastify";
-import { upload } from "../config/multer";
+//import { upload } from "../config/multer";
 import { uploadPhoto } from "../controllers/photos.upload.controller";
 import { verifyRole } from "../middlewares/verify-role";
 import { Role } from "@prisma/client";
@@ -45,10 +45,7 @@ export async function photosRoutes(app: FastifyInstance) {
   app.get(
     "/pending",
     {
-      preHandler: [
-        app.authenticate,
-        verifyRole([Role.ADMIN, Role.ORGANIZER]),
-      ],
+      preHandler: [app.authenticate, verifyRole([Role.ADMIN, Role.ORGANIZER])],
     },
     listPendingPhotos
   );
@@ -56,10 +53,7 @@ export async function photosRoutes(app: FastifyInstance) {
   app.patch(
     "/:id/approve",
     {
-      preHandler: [
-        app.authenticate,
-        verifyRole([Role.ADMIN, Role.ORGANIZER]),
-      ],
+      preHandler: [app.authenticate, verifyRole([Role.ADMIN, Role.ORGANIZER])],
     },
     approvePhoto
   );
@@ -67,22 +61,30 @@ export async function photosRoutes(app: FastifyInstance) {
   app.delete(
     "/:id/reject",
     {
-      preHandler: [
-        app.authenticate,
-        verifyRole([Role.ADMIN, Role.ORGANIZER]),
-      ],
+      preHandler: [app.authenticate, verifyRole([Role.ADMIN, Role.ORGANIZER])],
     },
     rejectPhoto
   );
 
   // Upload (ADMIN / PHOTOGRAPHER)
-  app.post(
+  /*app.post(
     "/spots/:spotId/photo",
     {
       preHandler: [
         app.authenticate,
         verifyRole([Role.ADMIN, Role.PHOTOGRAPHER]),
         upload.single("file"),
+      ],
+    },
+    uploadPhoto
+  );*/
+
+  app.post(
+    "/spots/:spotId/photo",
+    {
+      preHandler: [
+        app.authenticate,
+        verifyRole([Role.ADMIN, Role.PHOTOGRAPHER]),
       ],
     },
     uploadPhoto

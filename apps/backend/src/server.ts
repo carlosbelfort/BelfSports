@@ -1,7 +1,8 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import jwt from "@fastify/jwt";
-import multer from "fastify-multer";
+import multipart from "@fastify/multipart";
+//import multer from "fastify-multer";
 import fastifyStatic from "@fastify/static";
 import path from "path";
 
@@ -40,7 +41,14 @@ await app.register(jwt, {
 });
 
 // REGISTRA O MULTER
-app.register(multer.contentParser);
+//app.register(multer.contentParser);
+
+// REGISTRA O MULTIPART
+app.register(multipart, {
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB
+  },
+});
 
 // =====================
 // Decorators
@@ -66,7 +74,7 @@ app.register(async (protectedRoutes) => {
   protectedRoutes.register(spotsRoutes, { prefix: "/spots" });
   protectedRoutes.register(photosRoutes, { prefix: "/photos" });
   protectedRoutes.register(adminRoutes, { prefix: "/admin" });
-  protectedRoutes.register(moderationRoutes, { prefix: "/moderation" });  
+  protectedRoutes.register(moderationRoutes, { prefix: "/moderation" });
 });
 
 app.register(organizerRoutes, { prefix: "/organizer" });

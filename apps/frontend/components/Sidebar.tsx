@@ -147,12 +147,13 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       { href: "/dashboard/organizer/events", label: "Criar Evento" },
       { href: "/dashboard/organizer/createSpot", label: "Criar Spot" },
       { href: "/dashboard/organizer/spots", label: "Lista de Spots" },
+      { href: "/dashboard/moderation", label: "Moderação de Fotos" },
     ],
     PHOTOGRAPHER: [
       { href: "/dashboard/photographer", label: "Dashboard" },
       { href: "/dashboard/photographer/spots", label: "Spots" },
       { href: "/dashboard/photographer/listUploads", label: "Meus Uploads" },
-      { href: "/dashboard/photographer/upload", label: "Upload de Foto" },
+      { href: "/dashboard/upload", label: "Upload de Foto" },
     ],
     USER: [
       { href: "/dashboard/user", label: "Meus Eventos" },
