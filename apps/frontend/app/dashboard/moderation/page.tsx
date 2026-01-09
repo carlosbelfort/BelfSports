@@ -1,74 +1,13 @@
-/*"use client";
-
-
-import { useEffect, useState } from "react";
-
-export default function ModerationPage() {
-  const [photos, setPhotos] = useState<any[]>([]);
-
-  function load() {
-    fetch("http://localhost:3333/moderation/photos", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-      .then((res) => res.json())
-      .then(setPhotos);
-  }
-
-  useEffect(load, []);
-
-  async function approve(id: string) {
-    await fetch(`http://localhost:3333/moderation/photos/${id}/approve`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    load();
-  }
-
-  async function reject(id: string) {
-    await fetch(`http://localhost:3333/moderation/photos/${id}/reject`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    load();
-  }
-
-  return (
-    
-      <div>
-        <h1>Moderação de Fotos</h1>
-
-        {photos.map((photo) => (
-          <div key={photo.id}>
-            <img
-              src={`http://localhost:3333/uploads/${photo.filename}`}
-              width={200}
-            />
-            <p>
-              {photo.spot.name} — {photo.spot.event.title}
-            </p>
-            <button onClick={() => approve(photo.id)}>Aprovar</button>
-            <button onClick={() => reject(photo.id)}>Rejeitar</button>
-          </div>
-        ))}
-      </div>
-    
-  );
-}*/
-
 "use client";
 
 import { useEffect, useState } from "react";
 import Card from "@/components/Card";
 import { Button } from "@/components/Button";
+import ImageZoomModal from "@/components/image-zoom-modal";
 
 export default function ModerationPage() {
   const [photos, setPhotos] = useState<any[]>([]);
+  const [zoomImage, setZoomImage] = useState<string | null>(null);
 
   function load() {
     fetch("http://localhost:3333/moderation/photos", {
@@ -108,19 +47,32 @@ export default function ModerationPage() {
         Moderação de Fotos
       </h1>
 
-      {photos.length === 0 && (
-        <p className="text-white/70">Nenhuma foto pendente.</p>
-      )}
-
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {photos.map((photo) => (
           <Card key={photo.id}>
-            {/* Imagem */}
-            <div className="mb-4 overflow-hidden rounded-lg">
+            {/* Imagem com zoom */}
+            <div
+              className="
+                mb-4
+                cursor-zoom-in
+                overflow-hidden
+                rounded-lg
+              "
+              onClick={() =>
+                setZoomImage(
+                  `http://localhost:3333/uploads/${photo.filename}`
+                )
+              }
+            >
               <img
                 src={`http://localhost:3333/uploads/${photo.filename}`}
-                alt="Foto enviada"
-                className="h-56 w-full object-cover transition hover:scale-105"
+                className="
+                  h-56
+                  w-full
+                  object-cover
+                  transition
+                  hover:scale-105
+                "
               />
             </div>
 
@@ -146,6 +98,14 @@ export default function ModerationPage() {
           </Card>
         ))}
       </div>
+
+      {/* Modal de zoom */}
+      {zoomImage && (
+        <ImageZoomModal
+          src={zoomImage}
+          onClose={() => setZoomImage(null)}
+        />
+      )}
     </div>
   );
 }

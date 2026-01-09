@@ -148,6 +148,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       { href: "/dashboard/organizer/createSpot", label: "Criar Spot" },
       { href: "/dashboard/organizer/spots", label: "Lista de Spots" },
       { href: "/dashboard/moderation", label: "Moderação de Fotos" },
+      { href: "/gallery", label: "Galeria" },
     ],
     PHOTOGRAPHER: [
       { href: "/dashboard/photographer", label: "Dashboard" },

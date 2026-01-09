@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
-import DashboardLayout from "@/components/DashboardLayout";
 import Card from "@/components/Card";
 
 type Event = {
@@ -38,7 +37,7 @@ export default function OrganizerEventsPage() {
   }
 
   return (
-    <DashboardLayout>
+    <main>
       <Card>
         <h1 className="text-2xl mb-6">Meus Eventos</h1>
 
@@ -50,15 +49,11 @@ export default function OrganizerEventsPage() {
 
         <div className="space-y-4">
           {events.map((event) => (
-            <div
-              key={event.id}
-              className="border border-zinc-800 p-4 rounded"
-            >
+            <div key={event.id} className="border border-zinc-800 p-4 rounded">
               <p className="font-bold text-lg">{event.title}</p>
 
               <p className="text-sm text-zinc-400">
-                {event.location} —{" "}
-                {new Date(event.date).toLocaleDateString()}
+                {event.location} — {new Date(event.date).toLocaleDateString()}
               </p>
 
               <p
@@ -76,6 +71,6 @@ export default function OrganizerEventsPage() {
           ))}
         </div>
       </Card>
-    </DashboardLayout>
+    </main>
   );
 }

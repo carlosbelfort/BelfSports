@@ -13,3 +13,18 @@
 body {
   @apply bg-[var(--color2)] text-white;
 }
+
+@keyframes zoom {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-zoom {
+  animation: zoom 0.2s ease-out;
+}

@@ -1,11 +1,8 @@
-
-
 "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
-import DashboardLayout from "@/components/DashboardLayout";
 import Card from "@/components/Card";
 
 export default function CreateEventPage() {
@@ -55,7 +52,7 @@ export default function CreateEventPage() {
   }
 
   return (
-    <DashboardLayout>
+   <main>
       <Card>
         <h1 className="text-2xl mb-6">Criar novo evento</h1>
 
@@ -96,6 +93,6 @@ export default function CreateEventPage() {
           </button>
         </div>
       </Card>
-    </DashboardLayout>
+    </main>
   );
 }
