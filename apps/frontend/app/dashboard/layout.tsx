@@ -29,15 +29,23 @@ export default function DashboardLayout({
       </div>
     );
   }
-
   return (
-    <div className="flex min-h-screen bg-zinc-950 text-white">
-      {/* Sidebar */}
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+    <div className="flex flex-col min-h-screen bg-zinc-950 text-white">
+      <Header onMenuClick={() => setSidebarOpen(true)} />
+
 
       {/* Conteúdo */}
-      <div className="flex flex-1 flex-col lg:ml-64">
-        <Header onMenuClick={() => setSidebarOpen(true)} />
+      <div className="flex flex-1 ">
+        {/* Sidebar */}
+        <div className="hidden lg:block w-64">
+          <Sidebar open={true} onClose={() => {}} />
+        </div>
+
+        {/* Sidebar mobile*/}
+        <div className="lg:hidden">
+          <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        </div>
+
         <main className="flex-1 p-6">{children}</main>
       </div>
     </div>

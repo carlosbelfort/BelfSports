@@ -62,7 +62,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       </AnimatePresence>
 
       {/* Sidebar }*/
-      /*<motion.aside
+/*<motion.aside
         className="
     fixed
     inset-y-0
@@ -113,7 +113,6 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
   );
    
 }*/
-
 
 "use client";
 
@@ -179,23 +178,26 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       </AnimatePresence>
 
       {/* Sidebar */}
+
       <motion.aside
         className="
-          fixed
-          inset-y-0
-          left-0
-          z-50
-          w-64
-          bg-[var(--color1)]
-          p-6
-          flex
-          flex-col
-          gap-4
-          shadow-xl
+    fixed
+    inset-y-0
+    left-0
+    z-50
+    w-64
+    bg-[var(--color1)]
+    p-6
+    flex
+    flex-col
+    gap-4
+    shadow-xl
 
-          lg:static
-          lg:translate-x-0
-        "
+    lg:relative
+    
+    lg:h-[calc(100vh-4rem)]
+    lg:shadow-none
+  "
         initial={false}
         animate={{
           x: open ? 0 : "-100%",
@@ -203,6 +205,9 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         transition={{ type: "tween", duration: 0.25 }}
       >
         <h2 className="text-lg font-bold mb-6">Menu</h2>
+
+        {/* Desktop fix */}
+        <div className="hidden lg:block w-64 shrink-0" />
 
         <nav className="flex flex-col gap-2">
           {userLinks.map((link) => (

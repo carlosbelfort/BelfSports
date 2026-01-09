@@ -33,7 +33,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
   const logoHref = user ? getDashboardPath(user.role) : "/";
 
   return (
-    <header className="w-full bg-[var(--color3)] text-white shadow-md">
+    <header className="h-16 min-w-full bg-[var(--color3)] text-white shadow-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
         <div className="flex items-center gap-4">
           {/* Botão menu mobile */}
