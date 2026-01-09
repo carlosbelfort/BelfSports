@@ -36,3 +36,16 @@ export async function listMyEvents(
 
   return reply.send(events);
 }
+
+//LISTA TODOS OS EVENTOS APROVADOS//
+export async function listAllApprovedEvents(
+  _: FastifyRequest,
+  reply: FastifyReply
+) {
+  const events = await prisma.event.findMany({
+    where: { status: "APPROVED" },
+    orderBy: { date: "asc" },
+  });
+
+  return reply.send(events);
+}

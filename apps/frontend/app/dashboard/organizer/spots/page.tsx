@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
-import DashboardLayout from "@/components/DashboardLayout";
+
 import SpotList from "@/components/SpotList";
 import { Spot } from "@/types/spot";
 
@@ -29,9 +29,9 @@ export default function OrganizerSpotsPage() {
   }, []);
 
   return (
-    <DashboardLayout>
+    <main>
       <h1 className="text-2xl mb-6">Meus Spots</h1>
       <SpotList spots={spots} role="ORGANIZER" />
-    </DashboardLayout>
+    </main>
   );
 }

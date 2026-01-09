@@ -10,6 +10,7 @@ export async function listOrganizerEvents(
   const events = await prisma.event.findMany({
     where: {
       userId,
+      status: "APPROVED",
     },
     orderBy: {
       createdAt: "desc",

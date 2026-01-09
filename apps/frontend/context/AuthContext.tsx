@@ -39,17 +39,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(false);
   }, []);
 
-  /*function login(data: { id: string; role: User["role"]; token: string }) {
-    setUser({
-      id: data.id,
-      role: data.role,
-    });
-
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("role", data.role);
-    localStorage.setItem("userId", data.id);
-  }*/
-
   function login(data: { id: string; role: User["role"]; token: string }) {
     setUser({ id: data.id, role: data.role });
 
@@ -57,6 +46,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("userId", data.id);
 
     document.cookie = `token=${data.token}; path=/; max-age=86400`;
+    document.cookie = `role=${data.role}; path=/; max-age=86400`;
   }
 
   function logout() {
