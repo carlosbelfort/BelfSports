@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import DashboardLayout from "@/components/DashboardLayout";
-import Card from "@/components/Card";
 import { api } from "@/lib/api";
 
 interface Event {
@@ -20,11 +18,11 @@ export default function CreateSpotPage() {
   const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    async function loadEvents() {
+    async function listMyevents() {
       const data = await api("/events");
       setEvents(data.filter((ev: Event) => ev.status === "APPROVED"));
     }
-    loadEvents();
+    listMyevents();
   }, []);
 
   async function handleCreateSpot() {
@@ -55,8 +53,7 @@ export default function CreateSpotPage() {
   }
 
   return (
-    <DashboardLayout>
-      <Card title="Criar Spot">
+    
         <div className="flex flex-col gap-4">
           <input
             placeholder="Nome do Spot"
@@ -95,7 +92,6 @@ export default function CreateSpotPage() {
 
           {message && <p className="text-sm text-zinc-300">{message}</p>}
         </div>
-      </Card>
-    </DashboardLayout>
+      
   );
 }

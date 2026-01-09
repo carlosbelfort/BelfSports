@@ -193,8 +193,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
     gap-4
     shadow-xl
 
-    lg:relative
-    
+    lg:relative    
     lg:h-[calc(100vh-4rem)]
     lg:shadow-none
   "
