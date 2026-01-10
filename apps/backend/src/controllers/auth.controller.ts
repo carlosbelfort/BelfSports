@@ -26,6 +26,12 @@ export async function login(
     return reply.status(401).send({ message: "Credenciais inválidas" });
   }
 
+  if (!user.active) {
+  return reply
+    .status(403)
+    .send({ message: "Usuário aguardando aprovação do administrador" });
+}
+
   const token = jwt.sign(
     { sub: user.id, role: user.role },
     process.env.JWT_SECRET!,
