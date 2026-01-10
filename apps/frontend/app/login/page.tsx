@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { API_URL } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
+import { Button } from "@/components/Button";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -99,6 +100,9 @@ export default function LoginPage() {
             Cadastre-se
           </a>
         </p>
+        <Button variant="gray">
+          <a href="/">Voltar</a>
+        </Button>
       </div>
     </div>
   );

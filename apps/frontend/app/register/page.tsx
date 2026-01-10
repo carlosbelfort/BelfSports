@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { API_URL } from "@/lib/api";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/Button";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -48,7 +49,7 @@ export default function RegisterPage() {
             placeholder="Nome"
             value={name}
             onChange={e => setName(e.target.value)}
-            className="input"
+            className=" input bg-black border border-zinc-700 rounded px-4 py-3 text-white focus:outline-none focus:border-red-600"
             required
           />
 
@@ -56,7 +57,7 @@ export default function RegisterPage() {
             placeholder="E-mail"
             value={email}
             onChange={e => setEmail(e.target.value)}
-            className="input"
+            className="input bg-black border border-zinc-700 rounded px-4 py-3 text-white focus:outline-none focus:border-red-600"
             required
           />
 
@@ -65,19 +66,22 @@ export default function RegisterPage() {
             placeholder="Senha"
             value={password}
             onChange={e => setPassword(e.target.value)}
-            className="input"
+            className="input bg-black border border-zinc-700 rounded px-4 py-3 text-white focus:outline-none focus:border-red-600"
             required
           />
 
           {message && <p className="text-red-500 text-sm">{message}</p>}
 
-          <button
+          <Button variant="success"
             disabled={loading}
-            className="bg-red-600 py-3 rounded font-semibold"
+            
           >
             {loading ? "Cadastrando..." : "Cadastrar"}
-          </button>
-        </form>
+          </Button>
+        </form> <br />
+        <Button variant="gray">
+          <a href="/">Voltar</a>
+        </Button>
       </div>
     </div>
   );
