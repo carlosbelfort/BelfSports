@@ -7,7 +7,7 @@ import { Button } from "@/components/Button";
 type User = {
   id: string;
   email: string;
-  role: "USER" | "ORGANIZER" | "ADMIN";
+  role: "USER" | "ORGANIZER" | "ADMIN" | "PHOTOGRAPHER";
   active: boolean;
 };
 
@@ -18,9 +18,8 @@ export default function AdminUsersPage() {
   async function loadUsers() {
     const response = await api.get("/admin/users");
 
-    // proteção contra resposta inválida
-    setUsers(Array.isArray(response.data) ? response.data : []);
-
+    // response JÁ é o array
+    setUsers(Array.isArray(response) ? response : []);
     setLoading(false);
   }
 
@@ -51,12 +50,13 @@ export default function AdminUsersPage() {
       <h1 className="text-2xl mb-6">Gerenciar Usuários</h1>
 
       <table className="w-full text-sm border border-zinc-800">
-        <thead className="bg-zinc-900">
+        <thead className="bg-zinc-900 text-center">
           <tr>
             <th className="p-2">Email</th>
             <th className="p-2">Role</th>
             <th className="p-2">Status</th>
             <th className="p-2">Ações</th>
+            <th className="p-2">Role</th>
           </tr>
         </thead>
 
@@ -71,9 +71,9 @@ export default function AdminUsersPage() {
 
           {users.map((user) => (
             <tr key={user.id} className="border-t border-zinc-800">
-              <td className="p-2">{user.email}</td>
+              <td className="p-2 text-center">{user.email}</td>
 
-              <td className="p-2">
+              <td className="p-2 text-center">
                 <select
                   value={user.role}
                   onChange={(e) => changeRole(user.id, e.target.value)}
@@ -81,26 +81,42 @@ export default function AdminUsersPage() {
                 >
                   <option value="USER">USER</option>
                   <option value="ORGANIZER">ORGANIZER</option>
+                  <option value="PHOTOGRAPHER">FOTÓGRAFO</option>
                   <option value="ADMIN">ADMIN</option>
                 </select>
               </td>
 
-              <td className="p-2">{user.active ? "Ativo" : "Bloqueado"}</td>
+              <td className="p-2 text-center">
+                {user.active ? (
+                  <span className="text-green-500">Ativo</span>
+                ) : (
+                  <span className="text-yellow-400">Pendente</span>
+                )}
+              </td>
 
               <td className="p-2 flex gap-2">
-                <button
+                <Button
+                  variant="caution"
                   onClick={() => toggleStatus(user.id, user.active)}
-                  className="text-yellow-400"
                 >
                   {user.active ? "Bloquear" : "Ativar"}
-                </button>
+                </Button>
 
-                <Button variant="danger"
-                  onClick={() => removeUser(user.id)}
-                  
-                >
+                <Button variant="danger" onClick={() => removeUser(user.id)}>
                   Excluir
                 </Button>
+              </td>
+              <td className="text-center">
+                <select
+                  value={user.role}
+                  onChange={(e) => changeRole(user.id, e.target.value)}
+                  className="bg-zinc-900 border border-zinc-700 p-1 rounded"
+                >
+                  <option value="USER">USER</option>
+                  <option value="ORGANIZER">ORGANIZER</option>
+                  <option value="PHOTOGRAPHER">PHOTOGRAPHER</option>
+                  <option value="ADMIN">ADMIN</option>
+                </select>
               </td>
             </tr>
           ))}
