@@ -21,8 +21,9 @@ export default function AdminDashboard() {
         <AdminCard title="Spots" href="/dashboard/admin/spots" />
         <AdminCard title="Criar Spots" href="/dashboard/admin/createSpot" />
         <AdminCard title="Uploads" href="/dashboard/upload" />
-        <AdminCard title="Moderação de Fotos" href="/dashboard/admin/moderation" />
+        <AdminCard title="Moderação de Fotos" href="/dashboard/moderation" />
         <AdminCard title="Usuários" href="/dashboard/admin/users" />
+        <AdminCard title="Galeria" href="../gallery" />
         
       </div>
 

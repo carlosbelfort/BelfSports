@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
+import { Button } from "@/components/Button";
 
 interface Event {
   id: string;
@@ -100,13 +101,13 @@ export default function CreateSpotPage() {
         ))}
       </select>
 
-      <button
+      <Button
         onClick={handleCreateSpot}
         disabled={loading}
-        className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 transition px-4 py-2 rounded"
+        variant="sky"
       >
         {loading ? "Criando..." : "Criar Spot"}
-      </button>
+      </Button>
 
       {message && <p className="text-sm text-zinc-300">{message}</p>}
     </div>
