@@ -23,8 +23,8 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       { href: "/dashboard/admin/createSpot", label: "Criar Spot" },
       { href: "/dashboard/upload", label: "Upload" },
       { href: "/dashboard/moderation", label: "Moderação de Fotos" },
-      { href: "/gallery", label: "Galeria" },
       { href: "/dashboard/admin/users", label: "Usuários" },
+      { href: "/gallery", label: "Galeria" },
     ],
     ORGANIZER: [
       { href: "/dashboard/organizer", label: "Dashboard" },

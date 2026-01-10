@@ -1,46 +1,50 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { api } from '@/lib/api'
+import { useEffect, useState } from "react";
+import { api } from "@/lib/api";
+import { Button } from "@/components/Button";
 
 type User = {
-  id: string
-  email: string
-  role: 'USER' | 'ORGANIZER' | 'ADMIN'
-  active: boolean
-}
+  id: string;
+  email: string;
+  role: "USER" | "ORGANIZER" | "ADMIN";
+  active: boolean;
+};
 
 export default function AdminUsersPage() {
-  const [users, setUsers] = useState<User[]>([])
-  const [loading, setLoading] = useState(true)
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
 
   async function loadUsers() {
-    const response = await api.get('/admin/users')
-    setUsers(response.data)
-    setLoading(false)
+    const response = await api.get("/admin/users");
+
+    // proteção contra resposta inválida
+    setUsers(Array.isArray(response.data) ? response.data : []);
+
+    setLoading(false);
   }
 
   async function changeRole(id: string, role: string) {
-    await api.patch(`/admin/users/${id}/role`, { role })
-    loadUsers()
+    await api.patch(`/admin/users/${id}/role`, { role });
+    loadUsers();
   }
 
   async function toggleStatus(id: string, active: boolean) {
-    await api.patch(`/admin/users/${id}/status`, { active: !active })
-    loadUsers()
+    await api.patch(`/admin/users/${id}/status`, { active: !active });
+    loadUsers();
   }
 
   async function removeUser(id: string) {
-    if (!confirm('Tem certeza que deseja excluir este usuário?')) return
-    await api.delete(`/admin/users/${id}`)
-    loadUsers()
+    if (!confirm("Tem certeza que deseja excluir este usuário?")) return;
+    await api.delete(`/admin/users/${id}`);
+    loadUsers();
   }
 
   useEffect(() => {
-    loadUsers()
-  }, [])
+    loadUsers();
+  }, []);
 
-  if (loading) return <p>Carregando usuários...</p>
+  if (loading) return <p>Carregando usuários...</p>;
 
   return (
     <div>
@@ -57,14 +61,22 @@ export default function AdminUsersPage() {
         </thead>
 
         <tbody>
-          {users.map(user => (
+          {users.length === 0 && (
+            <tr>
+              <td colSpan={4} className="p-4 text-center text-zinc-400">
+                Nenhum usuário encontrado
+              </td>
+            </tr>
+          )}
+
+          {users.map((user) => (
             <tr key={user.id} className="border-t border-zinc-800">
               <td className="p-2">{user.email}</td>
 
               <td className="p-2">
                 <select
                   value={user.role}
-                  onChange={e => changeRole(user.id, e.target.value)}
+                  onChange={(e) => changeRole(user.id, e.target.value)}
                   className="bg-zinc-900 border border-zinc-700 p-1 rounded"
                 >
                   <option value="USER">USER</option>
@@ -73,29 +85,27 @@ export default function AdminUsersPage() {
                 </select>
               </td>
 
-              <td className="p-2">
-                {user.active ? 'Ativo' : 'Bloqueado'}
-              </td>
+              <td className="p-2">{user.active ? "Ativo" : "Bloqueado"}</td>
 
               <td className="p-2 flex gap-2">
                 <button
                   onClick={() => toggleStatus(user.id, user.active)}
                   className="text-yellow-400"
                 >
-                  {user.active ? 'Bloquear' : 'Ativar'}
+                  {user.active ? "Bloquear" : "Ativar"}
                 </button>
 
-                <button
+                <Button variant="danger"
                   onClick={() => removeUser(user.id)}
-                  className="text-red-500"
+                  
                 >
                   Excluir
-                </button>
+                </Button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
-  )
+  );
 }
