@@ -1,36 +1,3 @@
-/*"use client";
-
-import { useEffect, useState } from "react";
-
-export default function PublicGallery() {
-  const [photos, setPhotos] = useState<any[]>([]);
-
-  useEffect(() => {
-    fetch("http://localhost:3333/gallery")
-      .then((res) => res.json())
-      .then(setPhotos);
-  }, []);
-
-  return (
-    <div>
-      <h1>Galeria Pública</h1>
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>
-        {photos.map((photo) => (
-          <div key={photo.id}>
-            <img
-              src={`http://localhost:3333/uploads/${photo.filename}`}
-              width={250}
-            />
-            <p>{photo.spot.event.title}</p>
-            <small>{photo.spot.name}</small>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}*/
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -72,11 +39,12 @@ export default function PublicGallery() {
   }, []);
 
   return (
+    <main>
     <div className="p-6">
       <Button variant="gray" onClick={() => router.back()}>
         ← Voltar
       </Button>
-      <h1 className="mb-6 text-2xl font-bold">Eventos</h1>
+      <h1 className="flex justify-center mb-6 text-4xl font-serif font-bold">GALERIA DE FOTOS</h1>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {events.map(({ event }) => (
@@ -88,5 +56,6 @@ export default function PublicGallery() {
         ))}
       </div>
     </div>
+    </main>
   );
 }

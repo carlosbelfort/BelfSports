@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { Button } from "@/components/Button";
+import { useRouter } from "next/navigation";
 
 type User = {
   id: string;
@@ -14,11 +15,11 @@ type User = {
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   async function loadUsers() {
     const response = await api.get("/admin/users");
 
-    // response JÁ é o array
     setUsers(Array.isArray(response) ? response : []);
     setLoading(false);
   }
@@ -47,13 +48,15 @@ export default function AdminUsersPage() {
 
   return (
     <div>
+      <Button variant="gray" onClick={() => router.back()}>
+        ← Voltar
+      </Button>
       <h1 className="text-2xl mb-6">Gerenciar Usuários</h1>
 
       <table className="w-full text-sm border border-zinc-800">
         <thead className="bg-zinc-900 text-center">
           <tr>
             <th className="p-2">Email</th>
-            <th className="p-2">Role</th>
             <th className="p-2">Status</th>
             <th className="p-2">Ações</th>
             <th className="p-2">Role</th>
@@ -74,19 +77,6 @@ export default function AdminUsersPage() {
               <td className="p-2 text-center">{user.email}</td>
 
               <td className="p-2 text-center">
-                <select
-                  value={user.role}
-                  onChange={(e) => changeRole(user.id, e.target.value)}
-                  className="bg-zinc-900 border border-zinc-700 p-1 rounded"
-                >
-                  <option value="USER">USER</option>
-                  <option value="ORGANIZER">ORGANIZER</option>
-                  <option value="PHOTOGRAPHER">FOTÓGRAFO</option>
-                  <option value="ADMIN">ADMIN</option>
-                </select>
-              </td>
-
-              <td className="p-2 text-center">
                 {user.active ? (
                   <span className="text-green-500">Ativo</span>
                 ) : (
@@ -94,7 +84,7 @@ export default function AdminUsersPage() {
                 )}
               </td>
 
-              <td className="p-2 flex gap-2">
+              <td className="p-2 flex gap-2 justify-center">
                 <Button
                   variant="caution"
                   onClick={() => toggleStatus(user.id, user.active)}

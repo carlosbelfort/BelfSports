@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { Button } from "@/components/Button";
+import { useRouter } from "next/navigation";
 
 type Event = {
   id: string;
@@ -15,6 +16,7 @@ type Event = {
 export default function AdminEventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   async function loadEvents() {
     try {
@@ -58,6 +60,9 @@ export default function AdminEventsPage() {
 
   return (
     <main>
+      <Button variant="gray" onClick={() => router.back()}>
+        ← Voltar
+      </Button>
       <h1 className="text-2xl mb-6">Moderação de Eventos</h1>
 
       <div className="space-y-4">

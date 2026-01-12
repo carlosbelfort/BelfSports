@@ -3,11 +3,13 @@
 import { useEffect, useState } from "react";
 import Card from "@/components/Card";
 import { Button } from "@/components/Button";
+import { useRouter } from "next/navigation";
 import ImageZoomModal from "@/components/image-zoom-modal";
 
 export default function ModerationPage() {
   const [photos, setPhotos] = useState<any[]>([]);
   const [zoomImage, setZoomImage] = useState<string | null>(null);
+  const router = useRouter();
 
   function load() {
     fetch("http://localhost:3333/moderation/photos", {
@@ -43,6 +45,9 @@ export default function ModerationPage() {
 
   return (
     <div className="p-6">
+      <Button variant="gray" onClick={() => router.back()}>
+        ← Voltar
+      </Button>
       <h1 className="mb-6 text-2xl font-bold text-white">
         Moderação de Fotos
       </h1>

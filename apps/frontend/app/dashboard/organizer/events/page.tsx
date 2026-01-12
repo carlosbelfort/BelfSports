@@ -4,10 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import Card from "@/components/Card";
+import { Button } from "@/components/Button";
 
 export default function CreateEventPage() {
   const router = useRouter();
-
+  
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
   const [location, setLocation] = useState("");
@@ -52,7 +53,10 @@ export default function CreateEventPage() {
   }
 
   return (
-   <main>
+    <main>
+      <Button variant="gray" onClick={() => router.back()}>
+        ← Voltar
+      </Button>
       <Card>
         <h1 className="text-2xl mb-6">Criar novo evento</h1>
 
@@ -80,9 +84,7 @@ export default function CreateEventPage() {
             className="p-3 bg-zinc-900 border border-zinc-800 rounded"
           />
 
-          {error && (
-            <p className="text-red-500 text-sm font-medium">{error}</p>
-          )}
+          {error && <p className="text-red-500 text-sm font-medium">{error}</p>}
 
           <button
             onClick={handleCreateEvent}

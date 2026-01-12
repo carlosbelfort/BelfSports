@@ -3,9 +3,12 @@ import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import SpotList from "@/components/SpotList";
 import { Spot } from "@/types/spot";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/Button";
 
 export default function AdminSpotsPage() {
   const [spots, setSpots] = useState<Spot[]>([]);
+  const router = useRouter();
 
   async function loadSpots() {
     const response = await api("/spots");
@@ -32,6 +35,9 @@ export default function AdminSpotsPage() {
 
   return (
     <main>
+      <Button variant="gray" onClick={() => router.back()}>
+        ← Voltar
+      </Button>
       <h1 className="text-2xl mb-6">Moderação de Spots</h1>
       <SpotList
         spots={spots}

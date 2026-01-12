@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import Card from "@/components/Card";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/Button";
 
 type Event = {
   id: string;
@@ -15,6 +17,7 @@ type Event = {
 export default function OrganizerEventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   async function loadMyEvents() {
     try {
@@ -38,6 +41,9 @@ export default function OrganizerEventsPage() {
 
   return (
     <main>
+      <Button variant="gray" onClick={() => router.back()}>
+        ← Voltar
+      </Button>
       <Card>
         <h1 className="text-2xl mb-6">Meus Eventos</h1>
 

@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/Button";
+import { useRouter } from "next/navigation";
+import Card from "@/components/Card";
 
 interface Event {
   id: string;
@@ -19,6 +21,7 @@ export default function CreateSpotPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const { user } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     if (!user) return;
@@ -73,43 +76,47 @@ export default function CreateSpotPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <input
-        placeholder="Nome do Spot"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="bg-zinc-900 border border-zinc-700 p-2 rounded"
-      />
-
-      <textarea
-        placeholder="Descrição (opcional)"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        className="bg-zinc-900 border border-zinc-700 p-2 rounded"
-      />
-
-      <select
-        value={eventId}
-        onChange={(e) => setEventId(e.target.value)}
-        className="bg-zinc-900 border border-zinc-700 p-2 rounded"
-      >
-        <option value="">Selecione um evento</option>
-        {events.map((event) => (
-          <option key={event.id} value={event.id} className="text-zinc-400">
-            {event.title}
-          </option>
-        ))}
-      </select>
-
-      <Button
-        onClick={handleCreateSpot}
-        disabled={loading}
-        variant="sky"
-      >
-        {loading ? "Criando..." : "Criar Spot"}
+    <main>
+      <Button variant="gray" onClick={() => router.back()}>
+        ← Voltar
       </Button>
+      <Card>
+        <div className="flex flex-col gap-4">
+          <h1 className="text-xl font-semibold mb-2">Criar Spot</h1>
+          <input
+            placeholder="Nome do Spot"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="bg-zinc-900 border border-zinc-700 p-2 rounded"
+          />
 
-      {message && <p className="text-sm text-zinc-300">{message}</p>}
-    </div>
+          <textarea
+            placeholder="Descrição (opcional)"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="bg-zinc-900 border border-zinc-700 p-2 rounded"
+          />
+
+          <select
+            value={eventId}
+            onChange={(e) => setEventId(e.target.value)}
+            className="bg-zinc-900 border border-zinc-700 p-2 rounded"
+          >
+            <option value="">Selecione um evento</option>
+            {events.map((event) => (
+              <option key={event.id} value={event.id} className="text-zinc-400">
+                {event.title}
+              </option>
+            ))}
+          </select>
+
+          <Button onClick={handleCreateSpot} disabled={loading} variant="sky">
+            {loading ? "Criando..." : "Criar Spot"}
+          </Button>
+
+          {message && <p className="text-sm text-zinc-300">{message}</p>}
+        </div>
+      </Card>
+    </main>
   );
 }
