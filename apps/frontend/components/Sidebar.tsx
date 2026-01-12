@@ -25,6 +25,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       { href: "/dashboard/moderation", label: "Moderação de Fotos" },
       { href: "/dashboard/admin/users", label: "Usuários" },
       { href: "/gallery", label: "Galeria" },
+      { href: "/dashboard/profile", label: "Perfil" },
     ],
     ORGANIZER: [
       { href: "/dashboard/organizer", label: "Dashboard" },
@@ -34,6 +35,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       { href: "/dashboard/organizer/spots", label: "Lista de Spots" },
       { href: "/dashboard/moderation", label: "Moderação de Fotos" },
       { href: "/gallery", label: "Galeria" },
+      { href: "/dashboard/profile", label: "Perfil" },
     ],
     PHOTOGRAPHER: [
       { href: "/dashboard/photographer", label: "Dashboard" },
@@ -41,11 +43,12 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       { href: "/dashboard/photographer/listUploads", label: "Meus Uploads" },
       { href: "/dashboard/upload", label: "Upload de Foto" },
       { href: "/gallery", label: "Galeria" },
+      { href: "/dashboard/profile", label: "Perfil" },
     ],
     USER: [
       { href: "/dashboard", label: "Dashboard" },
       { href: "/gallery", label: "Galeria" },
-      { href: "/dashboard/user/profile", label: "Perfil" },
+      { href: "/dashboard/profile", label: "Perfil" },
     ],
   };
 

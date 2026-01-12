@@ -21,11 +21,9 @@ export default function PhotographerDashboard() {
           title="Lista de uploads"
           href="/dashboard/photographer/listUploads"
         />
-        <AdminCard
-          title="Uploads de fotos"
-          href="/dashboard/upload"
-        />
+        <AdminCard title="Uploads de fotos" href="/dashboard/upload" />
         <AdminCard title="Galeria" href="../gallery" />
+        <AdminCard title="Perfil" href="./profile" />
       </div>
     </div>
   );

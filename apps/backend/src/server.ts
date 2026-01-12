@@ -2,7 +2,6 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import jwt from "@fastify/jwt";
 import multipart from "@fastify/multipart";
-//import multer from "fastify-multer";
 import fastifyStatic from "@fastify/static";
 import path from "path";
 
@@ -15,6 +14,7 @@ import { photosRoutes } from "./routes/photos.routes";
 import { organizerRoutes } from "./routes/organizer.routes";
 import { moderationRoutes } from "./routes/moderation.routes";
 import { galleryRoutes } from "./routes/gallery.routes";
+import { meRoutes } from "./routes/me.routes";
 
 // Middleware
 import { authenticate } from "./middlewares/authenticate";
@@ -75,6 +75,7 @@ app.register(async (protectedRoutes) => {
   protectedRoutes.register(photosRoutes, { prefix: "/photos" });
   protectedRoutes.register(adminRoutes, { prefix: "/admin" });
   protectedRoutes.register(moderationRoutes, { prefix: "/moderation" });
+  protectedRoutes.register(meRoutes, { prefix: "/me" });
 });
 
 app.register(organizerRoutes, { prefix: "/organizer" });

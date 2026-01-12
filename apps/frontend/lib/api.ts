@@ -1,6 +1,5 @@
 import axios from "axios";
 
-
 /**
  * Centraliza a URL do backend
  * Facilita troca de ambiente (dev / prod)
@@ -35,9 +34,11 @@ export const api = async (endpoint: string, options?: RequestInit) => {
   return response.json();
 };
 
-
-
-api.get = (endpoint: string) => api(endpoint);
+//api.get = (endpoint: string) => api(endpoint);
+api.get = (endpoint: string) =>
+  api(endpoint, {
+    cache: "no-store",
+  });
 
 api.post = (endpoint: string, body?: any) =>
   api(endpoint, {
