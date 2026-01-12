@@ -3,6 +3,7 @@ import { createSpot } from "../controllers/spots.controller";
 import { listSpots } from "../controllers/spots.list.controller";
 import { verifyRole } from "../middlewares/verify-role";
 import { Role } from "@prisma/client";
+import { prisma } from "../lib/prisma";
 import {
   listPendingSpots,
   updateSpotStatus,
@@ -54,7 +55,7 @@ export async function spotsRoutes(app: FastifyInstance) {
     async (request, reply) => {
       const { id } = request.params as { id: string };
 
-      await app.prisma.spot.delete({
+      await prisma.spot.delete({
         where: { id },
       });
 

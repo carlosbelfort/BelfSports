@@ -80,6 +80,6 @@ model Photo {
   createdAt DateTime @default(now())
 
   spotId String
-  spot   Spot @relation(fields: [spotId], references: [id])
+  spot   Spot @relation(fields: [spotId], references: [id], onDelete: Cascade)
 
 }
