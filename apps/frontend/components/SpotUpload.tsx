@@ -2,11 +2,6 @@
 import { api } from '@/lib/api'
 import { useState } from 'react'
 
-/*interface SpotUploadProps {
-  eventId: string
-  onUpload: () => void
-}*/
-
 export default function SpotUpload({ spotId }: { spotId: string }) {
   const [file, setFile] = useState<File | null>(null);
 

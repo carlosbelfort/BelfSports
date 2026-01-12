@@ -1,4 +1,5 @@
 import { Spot } from "@/types/spot";
+import { Button } from "./Button";
 
 interface SpotCardProps {
   spot: Spot;
@@ -37,36 +38,38 @@ export default function SpotCard({
         <div className="flex gap-2">
           {spot.status === "PENDING" && (
             <>
-              <button
+              <Button
                 onClick={() => onApprove?.(spot.id)}
-                className="px-3 py-1 text-sm bg-green-600 rounded"
+                variant="success"
               >
                 Aprovar
-              </button>
+              </Button>
 
-              <button
+              <Button
                 onClick={() => onReject?.(spot.id)}
-                className="px-3 py-1 text-sm bg-yellow-600 rounded"
+                variant="caution"
               >
                 Rejeitar
-              </button>
+              </Button>
             </>
           )}
 
-          <button
+          <Button
             onClick={() => onDelete?.(spot.id)}
-            className="px-3 py-1 text-sm bg-red-600 rounded"
+            variant="danger"
           >
             Excluir
-          </button>
+          </Button>
         </div>
       )}
 
       {/* PHOTOGRAPHER */}
       {role === "PHOTOGRAPHER" && spot.status === "APPROVED" && (
-        <button className="mt-2 px-3 py-1 text-sm bg-blue-600 rounded">
+        <a href="../upload">
+        <Button variant="sky">
           Enviar Fotos
-        </button>
+        </Button>
+        </a>
       )}
     </div>
   );

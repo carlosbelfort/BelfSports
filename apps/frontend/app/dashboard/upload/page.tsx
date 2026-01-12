@@ -1,12 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState} from "react";
+import { useParams, useRouter } from "next/navigation";
+import { Button } from "@/components/Button";
+import Card from "@/components/Card";
 
 export default function UploadPhotoPage() {
   const [spots, setSpots] = useState<any[]>([]);
   const [spotId, setSpotId] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     fetch("http://localhost:3333/spots", {
@@ -43,7 +47,10 @@ export default function UploadPhotoPage() {
 
   return (
     <main>
-      <div className="max-w-xl">
+      <Button variant="gray" onClick={() => router.back()}>
+        ← Voltar
+      </Button>
+      <Card>
         <h1 className="text-xl font-semibold mb-2">Upload de Foto</h1>
 
         <p className="text-sm opacity-80 mb-6">
@@ -119,23 +126,14 @@ export default function UploadPhotoPage() {
         </div>
 
         {/* Botão */}
-        <button
+        <Button
           onClick={handleUpload}
           disabled={!file || !spotId || loading}
-          className="
-              w-full
-              py-3
-              rounded-lg
-              font-semibold
-              transition
-              disabled:opacity-50
-              disabled:cursor-not-allowed
-              hover:brightness-110
-            "
+          variant="send"         
         >
           {loading ? "Enviando..." : "Enviar Foto"}
-        </button>
-      </div>
+        </Button>
+      </Card>
     </main>
   );
 }
