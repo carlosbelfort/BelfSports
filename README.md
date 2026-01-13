@@ -24,7 +24,7 @@ O sistema permite gerenciar **Eventos**, **Spots**, **Uploads de Fotos**, **Mode
 - Prisma ORM
 - SQLite (banco local)
 - JWT para autenticação
-- Multer para upload de arquivos
+- Multpart para upload de arquivos
 
 ---
 
