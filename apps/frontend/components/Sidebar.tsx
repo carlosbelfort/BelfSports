@@ -39,8 +39,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
     ],
     PHOTOGRAPHER: [
       { href: "/dashboard/photographer", label: "Dashboard" },
-      { href: "/dashboard/photographer/spots", label: "Spots" },
-      { href: "/dashboard/photographer/listUploads", label: "Meus Uploads" },
+      { href: "/dashboard/photographer/spots", label: "Spots" },      
       { href: "/dashboard/upload", label: "Upload de Foto" },
       { href: "/gallery", label: "Galeria" },
       { href: "/dashboard/profile", label: "Perfil" },

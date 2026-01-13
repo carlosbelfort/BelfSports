@@ -40,14 +40,13 @@ await app.register(jwt, {
   secret: process.env.JWT_SECRET ?? "supersecret",
 });
 
-// REGISTRA O MULTER
-//app.register(multer.contentParser);
-
 // REGISTRA O MULTIPART
 app.register(multipart, {
   limits: {
-    fileSize: 5 * 1024 * 1024, // 5MB
+    fileSize: 12 * 1024 * 1024,
+    files: 10, // Múltiplos arquivos
   },
+  attachFieldsToBody: false,
 });
 
 // =====================

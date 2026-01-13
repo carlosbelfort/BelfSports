@@ -17,10 +17,6 @@ export default function PhotographerDashboard() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <AdminCard title="Spots" href="/dashboard/photographer/spots" />
-        <AdminCard
-          title="Lista de uploads"
-          href="/dashboard/photographer/listUploads"
-        />
         <AdminCard title="Uploads de fotos" href="/dashboard/upload" />
         <AdminCard title="Galeria" href="../gallery" />
         <AdminCard title="Perfil" href="./profile" />

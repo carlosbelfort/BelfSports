@@ -1,7 +1,5 @@
 import type { FastifyRequest, FastifyReply } from "fastify";
 import { prisma } from "../lib/prisma";
-import bcrypt from "bcryptjs";
-
 
 export async function getMe(request: FastifyRequest, reply: FastifyReply) {
   const userId = request.user.sub;

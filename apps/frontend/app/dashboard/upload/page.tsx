@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/Button";
 import Card from "@/components/Card";
@@ -8,7 +8,8 @@ import Card from "@/components/Card";
 export default function UploadPhotoPage() {
   const [spots, setSpots] = useState<any[]>([]);
   const [spotId, setSpotId] = useState("");
-  const [file, setFile] = useState<File | null>(null);
+  //const [files, setFiles] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -23,26 +24,40 @@ export default function UploadPhotoPage() {
   }, []);
 
   async function handleUpload() {
-    if (!file || !spotId) return;
+    if (!files.length || !spotId) return;
 
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    const formData = new FormData();
-    formData.append("file", file);
+      const formData = new FormData();
+      files.forEach((file) => {
+        formData.append("photos", file);
+      });
 
-    await fetch(`http://localhost:3333/photos/spots/${spotId}/photo`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: formData,
-    });
+      const res = await fetch(
+        `http://localhost:3333/photos/spots/${spotId}/photo`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: formData,
+        }
+      );
 
-    setLoading(false);
-    setFile(null);
-    setSpotId("");
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+      }
 
-    alert("Foto enviada para aprovação!");
+      alert("Fotos enviadas para aprovação!");
+      setFiles([]);
+      setSpotId("");
+    } catch (err: any) {
+      alert(err.message || "Erro ao enviar fotos");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -111,15 +126,18 @@ export default function UploadPhotoPage() {
             <input
               id="file"
               type="file"
+              multiple
               className="hidden"
-              onChange={(e) => setFile(e.target.files?.[0] || null)}
+              onChange={(e) => setFiles(Array.from(e.target.files || []))}
             />
 
-            {file ? (
-              <span className="font-medium">{file.name}</span>
+            {files.length > 0 ? (
+              <span className="font-medium">
+                {files.length} arquivo(s) selecionado(s)
+              </span>
             ) : (
               <span className="text-sm opacity-80">
-                Clique para escolher um arquivo
+                Clique para escolher arquivos
               </span>
             )}
           </label>
@@ -128,10 +146,10 @@ export default function UploadPhotoPage() {
         {/* Botão */}
         <Button
           onClick={handleUpload}
-          disabled={!file || !spotId || loading}
-          variant="send"         
+          disabled={!files.length || !spotId || loading}
+          variant="send"
         >
-          {loading ? "Enviando..." : "Enviar Foto"}
+          {loading ? "Enviando..." : "Enviar Fotos"}
         </Button>
       </Card>
     </main>
