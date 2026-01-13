@@ -1,19 +1,95 @@
 # BelfSports
+### Sistema de Gestão de Eventos Esportivos
 
 ## Visão Geral
-Projeto fullstack composto por:
-- **Backend**: Node.js + Fastify + Prisma + SQLite
-- **Frontend**: Next.js + Tailwind CSS
+Aplicação **FullStack** desenvolvida como parte de um processo seletivo, com o objetivo de demonstrar integração fim‑a‑fim entre **Frontend (Next.js App Router)** e **Backend (Node.js + Fastify + Prisma)**, contemplando autenticação, RBAC, upload e moderação de fotos, painel administrativo e galeria pública.
+
+O sistema permite gerenciar **Eventos**, **Spots**, **Uploads de Fotos**, **Moderação** e **Visualização Pública**, conforme requisitos do desafio técnico.
 
 ---
 
-## Setup do Projeto (Passo a Passo)
+## Stack Utilizada
 
-### Pré-requisitos
+### Frontend
+- Next.js (App Router)
+- TypeScript
+- shadcn/ui
+- Tailwind CSS
+- Context API para autenticação
+
+### Backend
+- Node.js
+- Fastify
+- TypeScript
+- Prisma ORM
+- SQLite (banco local)
+- JWT para autenticação
+- Multer para upload de arquivos
+
+---
+
+## Funcionalidades Implementadas
+
+### Autenticação e RBAC
+- Login com email e senha
+- Autorização baseada em perfis (**admin**, **organizer**, **photographer**, **viewer**)
+- Proteção de rotas no backend e frontend
+
+### Eventos e Spots
+- CRUD completo de Eventos
+- CRUD de Spots vinculados a um Evento
+- Restrições por perfil (admin/organizer)
+
+### Upload de Fotos
+- Upload real via `multipart/form-data`
+- Formatos aceitos: JPEG / PNG
+- Upload restrito ao perfil **photographer**
+- Associação da foto a um Spot
+- Armazenamento local em pasta de uploads
+
+### Moderação
+- Fila de fotos com status `pending`
+- Aprovação ou rejeição por **admin** ou **organizer**
+- Atualização de status (`approved` / `rejected`)
+
+### Galeria Pública
+- Listagem de fotos aprovadas
+- Filtro por Evento e Spot
+- Acesso sem autenticação
+
+---
+
+## Estrutura do Projeto
+
+```
+root/
+ ├─ backend/
+ │   ├─ prisma/
+ │   │   ├─ schema.prisma
+ │   │   └─ seed.ts
+ │   ├─ src/
+ │   │   ├─ controllers/
+ │   │   ├─ routes/
+ │   │   ├─ middlewares/
+ │   │   └─ server.ts
+ │   ├─ dev.db
+ │   └─ package.json
+ │
+ └─ frontend/
+     ├─ app/
+     ├─ components/
+     ├─ contexts/
+     ├─ lib/
+     └─ package.json
+```
+
+---
+
+## Setup do Projeto
+
+### Pré‑requisitos
 - Node.js >= 18
-- NPM ou Yarn
-
-Clone o repositório e extraia os projetos `backend` e `frontend`.
+- npm ou yarn
 
 ---
 
@@ -21,34 +97,30 @@ Clone o repositório e extraia os projetos `backend` e `frontend`.
 
 ### Instalação
 ```bash
-cd backend/backend
+cd backend
 npm install
 ```
 
 ### Variáveis de Ambiente
-O arquivo `.env` já está configurado para ambiente local:
+Crie um arquivo `.env` baseado no `.env.example`:
+
 ```env
 DATABASE_URL="file:./dev.db"
-JWT_SECRET=supersecret
-PORT=3333
+JWT_SECRET="sua_chave_secreta"
 ```
 
-### Executar Migrações
+### Migrations e Seeds
 ```bash
-npx prisma migrate deploy
-```
-
-### Executar Seeds
-```bash
+npx prisma migrate dev
 npx prisma db seed
 ```
 
-### Rodar Backend
+### Rodar o Backend
 ```bash
 npm run dev
 ```
 
-Servidor disponível em:
+API disponível em:
 ```
 http://localhost:3333
 ```
@@ -59,11 +131,17 @@ http://localhost:3333
 
 ### Instalação
 ```bash
-cd frontend/frontend
+cd frontend
 npm install
 ```
 
-### Rodar Frontend
+### Variáveis de Ambiente
+`.env.local`
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3333
+```
+
+### Rodar o Frontend
 ```bash
 npm run dev
 ```
@@ -96,6 +174,66 @@ http://localhost:3000
 
 ---
 
+## Endpoints Principais
+
+### Auth
+- `POST /auth/login`
+
+### Eventos
+- `GET /events`
+- `POST /events`
+- `PUT /events/:id`
+- `DELETE /events/:id`
+
+### Spots
+- `GET /events/:id/spots`
+- `POST /spots`
+
+### Fotos
+- `POST /photos/upload`
+- `GET /photos/pending`
+- `PATCH /photos/:id/approve`
+- `PATCH /photos/:id/reject`
+
+### Galeria
+- `GET /gallery`
+
+---
+
+## Testes
+
+O projeto contém **testes automatizados** cobrindo:
+- Autenticação
+- RBAC (controle de acesso)
+- Criação e moderação de fotos
+
+Executar:
+```bash
+npm run test
+```
+
+---
+
+## Qualidade e Boas Práticas
+- ESLint configurado
+- Tipagem forte com TypeScript
+- Separação de camadas (routes, controllers, services)
+- Tratamento básico de erros e logs
+
+---
+
+## Aderência ao Desafio Técnico
+
+✔ Frontend com Next.js App Router e shadcn/ui
+✔ Backend Node.js com API real (sem mocks)
+✔ Autenticação e RBAC
+✔ Upload e moderação de fotos
+✔ Galeria pública
+✔ Seeds para avaliação
+✔ README completo com setup e instruções
+
+---
+
 ## API
 
 ### URL Base
@@ -103,40 +241,9 @@ http://localhost:3000
 http://localhost:3333
 ```
 
-### Principais Rotas
-
-#### Autenticação
-- `POST /sessions` – Login
-
-#### Usuários
-- `POST /users` – Criar usuário
-- `GET /users/me` – Usuário autenticado
-
-#### Admin
-- `GET /admin/users`
-- `POST /admin/create`
-
-#### Spots
-- `GET /spots`
-- `POST /spots`
-
-#### Upload
-- `POST /upload`
-
-> Rotas protegidas utilizam JWT via header:
-```http
-Authorization: Bearer <token>
-```
+## Observações Finais
+Este projeto foi desenvolvido com foco em **clareza**, **organização**, **experiência do usuário** e **aderência total aos requisitos do desafio**. Estrutura preparada para fácil evolução e manutenção.
 
 ---
 
-## Observações
-- Banco SQLite local (`dev.db`)
-- Prisma ORM
-- Uploads com Cloudinary (credenciais mockadas no `.env`)
-
----
-
-## Pronto para uso
-Após rodar backend e frontend, o sistema estará totalmente funcional para testes e desenvolvimento.
-
+**Autor:** Mateus Belfort
