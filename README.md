@@ -1,10 +1,11 @@
-# BelfSports
+# BelfSports  
 ### Sistema de Gestão de Eventos Esportivos
 
 ## Visão Geral
-Aplicação **FullStack** desenvolvida como parte de um processo seletivo, com o objetivo de demonstrar integração fim‑a‑fim entre **Frontend (Next.js App Router)** e **Backend (Node.js + Fastify + Prisma)**, contemplando autenticação, RBAC, upload e moderação de fotos, painel administrativo e galeria pública.
 
-O sistema permite gerenciar **Eventos**, **Spots**, **Uploads de Fotos**, **Moderação** e **Visualização Pública**, conforme requisitos do desafio técnico.
+O **BelfSports** é uma aplicação **Full Stack** desenvolvida como parte de um **processo seletivo técnico**, com foco em demonstrar boas práticas de arquitetura, autenticação, controle de acesso (RBAC), testes automatizados e integração entre **Frontend (Next.js App Router)** e **Backend (Node.js + Fastify + Prisma)**.
+
+O sistema permite o gerenciamento completo de **Eventos Esportivos**, **Spots de Fotografia**, **Upload e Moderação de Fotos**, além de uma **Galeria Pública** para visualização de conteúdos aprovados.
 
 ---
 
@@ -13,9 +14,9 @@ O sistema permite gerenciar **Eventos**, **Spots**, **Uploads de Fotos**, **Mode
 ### Frontend
 - Next.js (App Router)
 - TypeScript
-- shadcn/ui
 - Tailwind CSS
-- Context API para autenticação
+- shadcn/ui
+- Context API (Autenticação)
 
 ### Backend
 - Node.js
@@ -23,8 +24,12 @@ O sistema permite gerenciar **Eventos**, **Spots**, **Uploads de Fotos**, **Mode
 - TypeScript
 - Prisma ORM
 - SQLite (banco local)
-- JWT para autenticação
-- Multpart para upload de arquivos
+- JWT (autenticação)
+- `@fastify/multipart` (upload de arquivos)
+
+### Testes
+- Vitest
+- Fastify `app.inject` (testes de integração)
 
 ---
 
@@ -32,30 +37,37 @@ O sistema permite gerenciar **Eventos**, **Spots**, **Uploads de Fotos**, **Mode
 
 ### Autenticação e RBAC
 - Login com email e senha
-- Autorização baseada em perfis (**admin**, **organizer**, **photographer**, **viewer**)
-- Proteção de rotas no backend e frontend
+- Autenticação via JWT
+- Controle de acesso por perfil (**ADMIN**, **ORGANIZER**, **PHOTOGRAPHER**, **USER**)
+- Proteção de rotas no backend
+- Restrição de funcionalidades por papel do usuário
 
-### Eventos e Spots
-- CRUD completo de Eventos
-- CRUD de Spots vinculados a um Evento
-- Restrições por perfil (admin/organizer)
+### Eventos
+- Criação de eventos (ORGANIZER)
+- Listagem de eventos aprovados (ADMIN)
+- Validação de acesso (401 / 403)
+
+### Spots
+- Criação de spots vinculados a um evento
+- Listagem de spots pendentes
+- Aprovação / rejeição de spots (ADMIN)
+- Exclusão de spots
 
 ### Upload de Fotos
 - Upload real via `multipart/form-data`
-- Formatos aceitos: JPEG / PNG
-- Upload restrito ao perfil **photographer**
-- Associação da foto a um Spot
-- Armazenamento local em pasta de uploads
+- Upload restrito a **PHOTOGRAPHER** ou **ADMIN**
+- Associação de fotos a Spots
+- Armazenamento local em diretório `/uploads`
 
-### Moderação
-- Fila de fotos com status `pending`
-- Aprovação ou rejeição por **admin** ou **organizer**
-- Atualização de status (`approved` / `rejected`)
+### Moderação de Fotos
+- Listagem de fotos pendentes
+- Aprovação ou rejeição por **ADMIN** ou **ORGANIZER**
+- Controle de status das fotos
 
 ### Galeria Pública
 - Listagem de fotos aprovadas
-- Filtro por Evento e Spot
-- Acesso sem autenticação
+- Acesso público (sem autenticação)
+- Filtro por evento e spot
 
 ---
 
@@ -71,8 +83,10 @@ root/
  │   │   ├─ controllers/
  │   │   ├─ routes/
  │   │   ├─ middlewares/
+ │   │   ├─ tests/
  │   │   └─ server.ts
  │   ├─ dev.db
+ │   ├─ vitest.config.ts
  │   └─ package.json
  │
  └─ frontend/
@@ -87,9 +101,9 @@ root/
 
 ## Setup do Projeto
 
-### Pré‑requisitos
+### Pré-requisitos
 - Node.js >= 18
-- npm ou yarn
+- npm
 
 ---
 
@@ -102,20 +116,22 @@ npm install
 ```
 
 ### Variáveis de Ambiente
-Crie um arquivo `.env` baseado no `.env.example`:
+
+Crie um arquivo `.env`:
 
 ```env
 DATABASE_URL="file:./dev.db"
-JWT_SECRET="sua_chave_secreta"
+JWT_SECRET="supersecret"
 ```
 
-### Migrations e Seeds
+### Banco de Dados (Prisma)
+
 ```bash
 npx prisma migrate dev
 npx prisma db seed
 ```
 
-### Rodar o Backend
+### Executar o Backend
 ```bash
 npm run dev
 ```
@@ -141,7 +157,7 @@ npm install
 NEXT_PUBLIC_API_URL=http://localhost:3333
 ```
 
-### Rodar o Frontend
+### Executar o Frontend
 ```bash
 npm run dev
 ```
@@ -154,58 +170,19 @@ http://localhost:3000
 ---
 
 ## Credenciais de Teste
-(Definidas no seed do Prisma)
 
-- **Admin**
-  - Email: admin@belfsports.com
-  - Senha: 123456
-
-- **Organizador**
-  - Email: org@belfsports.com
-  - Senha: 123456
-
-- **Fotógrafo**
-  - Email: foto@belfsports.com
-  - Senha: 123456
-
-- **Usuário**
-  - Email: user@belfsports.com
-  - Senha: 123456
+| Perfil | Email | Senha |
+|------|------|------|
+| Admin | admin@belfsports.com | 123456 |
+| Organizer | org@belfsports.com | 123456 |
+| Photographer | foto@belfsports.com | 123456 |
+| User | user@belfsports.com | 123456 |
 
 ---
 
-## Endpoints Principais
+## Testes Automatizados
 
-### Auth
-- `POST /auth/login`
-
-### Eventos
-- `GET /events`
-- `POST /events`
-- `PUT /events/:id`
-- `DELETE /events/:id`
-
-### Spots
-- `GET /events/:id/spots`
-- `POST /spots`
-
-### Fotos
-- `POST /photos/upload`
-- `GET /photos/pending`
-- `PATCH /photos/:id/approve`
-- `PATCH /photos/:id/reject`
-
-### Galeria
-- `GET /gallery`
-
----
-
-## Testes
-
-O projeto contém **testes automatizados** cobrindo:
-- Autenticação
-- RBAC (controle de acesso)
-- Criação e moderação de fotos
+Os testes estão localizados em `backend/src/tests` e utilizam **Vitest** com `app.inject`.
 
 Executar:
 ```bash
@@ -214,36 +191,25 @@ npm run test
 
 ---
 
-## Qualidade e Boas Práticas
-- ESLint configurado
-- Tipagem forte com TypeScript
-- Separação de camadas (routes, controllers, services)
-- Tratamento básico de erros e logs
-
----
-
 ## Aderência ao Desafio Técnico
 
-✔ Frontend com Next.js App Router e shadcn/ui
-✔ Backend Node.js com API real (sem mocks)
-✔ Autenticação e RBAC
-✔ Upload e moderação de fotos
-✔ Galeria pública
-✔ Seeds para avaliação
-✔ README completo com setup e instruções
+✔ Backend Node.js com API real  
+✔ Frontend Next.js App Router  
+✔ Autenticação JWT  
+✔ RBAC  
+✔ Upload e moderação de fotos  
+✔ Galeria pública  
+✔ Seeds para avaliação  
+✔ Testes automatizados  
+✔ README completo e explicativo  
 
 ---
 
-## API
-
-### URL Base
-```
-http://localhost:3333
-```
-
 ## Observações Finais
-Este projeto foi desenvolvido com foco em **clareza**, **organização**, **experiência do usuário** e **aderência total aos requisitos do desafio**. Estrutura preparada para fácil evolução e manutenção.
+
+Este projeto foi desenvolvido com foco em clareza, organização, boas práticas e facilidade de avaliação técnica.
 
 ---
 
 **Autor:** Mateus Belfort
+
