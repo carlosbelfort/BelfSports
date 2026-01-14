@@ -89,12 +89,14 @@ app.register(fastifyStatic, {
 // Start server
 // =====================
 
-app
-  .listen({ port: 3333, host: "0.0.0.0" })
-  .then(() => {
-    console.log("🚀 Backend rodando em http://localhost:3333");
-  })
-  .catch((err) => {
-    app.log.error(err);
-    process.exit(1);
-  });
+if (process.env.NODE_ENV !== "test") {
+  app
+    .listen({ port: 3333 })
+    .then(() => {
+      app.log.info("🚀 Backend rodando em http://localhost:3333");
+    })
+    .catch((err) => {
+      app.log.error(err);
+      process.exit(1);
+    });
+}

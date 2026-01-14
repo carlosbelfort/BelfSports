@@ -8,15 +8,19 @@ import {
 } from "../controllers/event.controller";
 
 export async function eventRoutes(app: FastifyInstance) {
-  app.post("/", createEvent);
+  //app.post("/", createEvent);
+  app.post(
+    "/",
+    {
+      preHandler: [app.authenticate, verifyRole([Role.ORGANIZER, Role.ADMIN])],
+    },
+    createEvent
+  );
 
   app.get(
     "/me",
     {
-      preHandler: [
-        app.authenticate,
-        verifyRole([Role.ORGANIZER]),
-      ],
+      preHandler: [app.authenticate, verifyRole([Role.ORGANIZER])],
     },
     listMyEvents
   );
@@ -25,10 +29,7 @@ export async function eventRoutes(app: FastifyInstance) {
   app.get(
     "/",
     {
-      preHandler: [
-        app.authenticate,
-        verifyRole([Role.ADMIN]),
-      ],
+      preHandler: [app.authenticate, verifyRole([Role.ADMIN])],
     },
     listAllApprovedEvents
   );
