@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from '@/components/Button'
 import Link from 'next/link'
 
 
@@ -35,6 +36,14 @@ export default function Home() {
                      hover:scale-105"
         >
           Acessar plataforma
+        </Link>
+        <Link href="/gallery" className="mt-6 px-10 py-4 rounded-xl bg-yellow-600
+                     hover:bg-yellow-700 font-semibold text-lg
+                     transition-all duration-300 shadow-xl
+                     hover:scale-105">
+        
+            Acessar Galeria
+        
         </Link>
 
       </section>

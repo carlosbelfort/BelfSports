@@ -37,6 +37,7 @@ O sistema permite o gerenciamento completo de **Eventos Esportivos**, **Spots de
 
 ### Autenticação e RBAC
 - Login com email e senha
+- Criação de novo usuario com role padrão de "USER"
 - Autenticação via JWT
 - Controle de acesso por perfil (**ADMIN**, **ORGANIZER**, **PHOTOGRAPHER**, **USER**)
 - Proteção de rotas no backend
