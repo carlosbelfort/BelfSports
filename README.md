@@ -169,7 +169,46 @@ http://localhost:3000
 ```
 
 ---
+# Acesso em Rede Local (Múltiplos Computadores)
 
+O projeto pode ser acessado por outros computadores conectados à mesma rede local, permitindo, por exemplo, que um usuário photographer realize uploads em uma máquina enquanto um admin/organizer realiza a moderação em outra.
+
+### Passos para acesso em rede:
+
+#### Descobrir o IP da máquina servidor
+```bash
+ipconfig
+```
+###### Exemplo:
+IPv4: 192.168.0.10
+
+#### Backend
+
+O backend já está configurado para aceitar conexões externas.
+
+- Libere a porta 3333 no Firewall do Windows.
+
+#### Frontend
+
+Execute o frontend com:
+```bash
+npm run dev
+```
+Garanta que o script utilize:
+
+- next dev -H 0.0.0.0 -p 3000
+
+#### Ajustar a API no frontend
+
+- NEXT_PUBLIC_API_URL=http://192.168.0.10:3333
+
+#### Acessar de outro computador
+
+- http://192.168.0.10:3000
+
+#### Frontend e backend funcionarão normalmente para múltiplos usuários na rede local.
+
+---
 ## Credenciais de Teste
 
 | Perfil | Email | Senha |
