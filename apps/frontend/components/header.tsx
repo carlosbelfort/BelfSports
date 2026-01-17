@@ -4,7 +4,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { LogOut, RefreshCcw } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
   const { user, logout } = useAuth();
@@ -13,6 +19,10 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
   function handleLogout() {
     logout();
     router.push("/login");
+  }
+
+  function handleRefresh() {
+    router.refresh();
   }
 
   function getDashboardPath(role?: string) {
@@ -36,7 +46,6 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
     <header className="h-16 min-w-full bg-[var(--color3)] text-white shadow-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
         <div className="flex items-center gap-4">
-          {/* Botão menu mobile */}
           {user && (
             <button
               onClick={onMenuClick}
@@ -56,19 +65,51 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
 
         <AnimatePresence mode="wait">
           {user && (
-            <motion.button
-              key="logout"
-              onClick={handleLogout}
+            <motion.div
+              key="actions"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
-              className="rounded-md bg-[var(--color5)] px-4 py-2 text-sm font-semibold hover:opacity-90"
+              className="flex items-center gap-3"
             >
-              Sair
-            </motion.button>
+              <TooltipProvider>
+                {/* Refresh */}
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={handleRefresh}
+                      className="rounded-md p-2 hover:bg-white/10"
+                      aria-label="Atualizar"
+                    >
+                      <RefreshCcw size={18} />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <span>Atualizar</span>
+                  </TooltipContent>
+                </Tooltip>
+
+                {/* Logout */}
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={handleLogout}
+                      className="rounded-md p-2 hover:bg-white/10"
+                      aria-label="Sair"
+                    >
+                      <LogOut size={18} />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <span>Sair</span>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </motion.div>
           )}
         </AnimatePresence>
       </div>
     </header>
   );
 }
+
