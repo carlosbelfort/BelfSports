@@ -30,7 +30,7 @@ export default function PublicGallery() {
   const router = useRouter();
 
   useEffect(() => {
-    fetch("http://localhost:3333/gallery")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/gallery`)
       .then((res) => res.json())
       .then((photos) => {
         const grouped = groupByEvent(photos);
