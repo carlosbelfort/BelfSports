@@ -13,7 +13,7 @@ export default function SpotGalleryPage() {
   const router = useRouter();
 
   useEffect(() => {
-    fetch("http://localhost:3333/gallery")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/gallery`)
       .then((res) => res.json())
       .then((data) => {
         const filtered = data.filter((p: any) => p.spot.id === spotId);
@@ -39,7 +39,7 @@ export default function SpotGalleryPage() {
         {photos.map((photo) => (
           <img
             key={photo.id}
-            src={`http://localhost:3333/uploads/${photo.filename}`}
+            src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${photo.filename}`}
             className="
               cursor-zoom-in
               rounded-lg
@@ -49,7 +49,7 @@ export default function SpotGalleryPage() {
               hover:opacity-90
             "
             onClick={() =>
-              setZoom(`http://localhost:3333/uploads/${photo.filename}`)
+              setZoom(`${process.env.NEXT_PUBLIC_API_URL}/uploads/${photo.filename}`)
             }
           />
         ))}

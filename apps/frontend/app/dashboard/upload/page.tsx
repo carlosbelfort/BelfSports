@@ -14,7 +14,7 @@ export default function UploadPhotoPage() {
   const router = useRouter();
 
   useEffect(() => {
-    fetch("http://localhost:3333/spots", {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/spots`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -35,7 +35,7 @@ export default function UploadPhotoPage() {
       });
 
       const res = await fetch(
-        `http://localhost:3333/photos/spots/${spotId}/photo`,
+        `${process.env.NEXT_PUBLIC_API_URL}/photos/spots/${spotId}/photo`,
         {
           method: "POST",
           headers: {

@@ -12,7 +12,7 @@ export default function ModerationPage() {
   const router = useRouter();
 
   function load() {
-    fetch("http://localhost:3333/moderation/photos", {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/moderation/photos`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -24,7 +24,7 @@ export default function ModerationPage() {
   useEffect(load, []);
 
   async function approve(id: string) {
-    await fetch(`http://localhost:3333/moderation/photos/${id}/approve`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/moderation/photos/${id}/approve`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -34,7 +34,7 @@ export default function ModerationPage() {
   }
 
   async function reject(id: string) {
-    await fetch(`http://localhost:3333/moderation/photos/${id}/reject`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/moderation/photos/${id}/reject`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -65,12 +65,12 @@ export default function ModerationPage() {
               "
               onClick={() =>
                 setZoomImage(
-                  `http://localhost:3333/uploads/${photo.filename}`
+                  `${process.env.NEXT_PUBLIC_API_URL}/uploads/${photo.filename}`
                 )
               }
             >
               <img
-                src={`http://localhost:3333/uploads/${photo.filename}`}
+                src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${photo.filename}`}
                 className="
                   h-56
                   w-full
