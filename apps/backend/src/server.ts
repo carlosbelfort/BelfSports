@@ -29,7 +29,7 @@ export const app = Fastify({
 
 // CORS
 await app.register(cors, {
-  origin: "http://localhost:3000",
+  origin: true,
   credentials: true,
   methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -91,7 +91,7 @@ app.register(fastifyStatic, {
 
 if (process.env.NODE_ENV !== "test") {
   app
-    .listen({ port: 3333 })
+    .listen({ port: Number(process.env.PORT) || 3333, host: "0.0.0.0" })
     .then(() => {
       app.log.info("🚀 Backend rodando em http://localhost:3333");
     })
