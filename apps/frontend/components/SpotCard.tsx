@@ -18,7 +18,7 @@ export default function SpotCard({
   onDelete,
 }: SpotCardProps) {
   return (
-    <div className="border rounded p-4 bg-zinc-900">
+    <div className="border rounded p-4 bg-black/80 backdrop-blur shadow-lg">
       <h3 className="text-lg font-semibold">{spot.name}</h3>
 
       {spot.description && (

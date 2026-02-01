@@ -5,7 +5,7 @@ type CardProps = {
 
 export default function Card({ title, children }: CardProps) {
   return (
-    <div className="rounded-xl bg-white/10 backdrop-blur p-5 shadow-lg border border-white/10">
+    <div className="rounded-xl bg-black/60 backdrop-blur p-5 shadow-lg border border-white/10">
       {title && (
         <h2 className="mb-4 text-lg font-semibold text-white">
           {title}

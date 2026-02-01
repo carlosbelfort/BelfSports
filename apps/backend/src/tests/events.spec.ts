@@ -9,8 +9,6 @@ describe("Events - Fluxo principal", () => {
   let organizerToken: string;
 
   beforeAll(async () => {
-    await app.ready();
-
     // Login ADMIN
     const adminLogin = await app.inject({
       method: "POST",
@@ -45,7 +43,7 @@ describe("Events - Fluxo principal", () => {
       },
       payload: {
         title: "Evento Teste",
-        location: "São Paulo",
+        location: "São Paulo-SP",
         date: new Date().toISOString(),
       },
     });

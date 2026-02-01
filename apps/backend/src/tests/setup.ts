@@ -1,13 +1,12 @@
 import { execSync } from "child_process";
+import { beforeAll, afterAll } from "vitest";
 import { app } from "../server";
 
-beforeAll(() => {
+beforeAll(async () => {
   process.env.NODE_ENV = "test";
 
-  execSync("npx prisma db push", { stdio: "ignore" });
-  execSync("npx prisma db seed", { stdio: "ignore" });
-});
+  execSync("npx prisma db push", { stdio: "inherit" });
+  execSync("npx prisma db seed", { stdio: "inherit" });
 
-afterAll(async () => {
-  await app.close();
-});
+  await app.ready();
+}, 30000);

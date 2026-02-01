@@ -39,7 +39,7 @@ export default function RegisterPage() {
 
   return (
     <div className="flex items-center justify-center py-20 px-4">
-      <div className="w-full max-w-md bg-zinc-900 border border-zinc-700 rounded-xl p-8">
+      <div className="w-full max-w-md bg-black/40 backdrop-blur-md shadow-sm border border-zinc-700 rounded-xl p-8">
         <h2 className="text-2xl font-bold text-center mb-6">
           Criar Conta
         </h2>

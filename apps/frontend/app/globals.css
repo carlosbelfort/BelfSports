@@ -5,13 +5,18 @@
 :root {
   --color1: #67917a; /* primária */
   --color2: #170409; /* fundo */
-  --color3: #b8af03; /* destaque */
+  --color3: #b8af03a0; /* destaque */
   --color4: #ccbf82; /* secundária */
   --color5: #e33258; /* alerta */
 }
 
-body {
-  @apply bg-[var(--color2)] text-white;
+body {  
+  background-color: var(--color2);
+  background-image: url("/images/bgbike.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 @keyframes zoom {

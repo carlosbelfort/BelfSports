@@ -1,10 +1,11 @@
-import request from "supertest";
 import { app } from "../../server";
 
 export async function loginAs(email: string, password = "123456") {
-  const response = await request(app.server)
-    .post("/auth/login")
-    .send({ email, password });
+  const response = await app.inject({
+    method: "POST",
+    url: "/auth/login",
+    payload: { email, password },
+  });
 
-  return response.body.token;
+  return JSON.parse(response.body).token;
 }

@@ -5,8 +5,7 @@ import { loginAs } from "./helpers/auth";
 describe("RBAC - Controle de acesso", () => {
   let userToken: string;
 
-  beforeAll(async () => {
-    await app.ready();
+  beforeAll(async () => {    
     userToken = await loginAs("user@belfsports.com");
   });
 

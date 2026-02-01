@@ -53,7 +53,7 @@ export default function AdminUsersPage() {
       </Button>
       <h1 className="text-2xl mb-6">Gerenciar Usuários</h1>
 
-      <table className="w-full text-sm border border-zinc-800">
+      <table className="w-full text-sm border border-zinc-800 bg-black/80">
         <thead className="bg-zinc-900 text-center">
           <tr>
             <th className="p-2">Email</th>

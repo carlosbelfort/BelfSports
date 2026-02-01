@@ -59,7 +59,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex items-center justify-center py-20 px-4">
-      <div className="w-full max-w-md bg-zinc-900 border border-red-700 rounded-xl shadow-lg p-8">
+      <div className="w-full max-w-md bg-black/40 backdrop-blur-md shadow-sm border border-red-700 rounded-xl shadow-lg p-8">
         <h2 className="text-2xl font-bold text-center text-red-600 mb-6">
           Acesso ao BelfSports
         </h2>
@@ -94,7 +94,7 @@ export default function LoginPage() {
             {loading ? "Entrando..." : "Entrar"}
           </button>
         </form>
-        <p className="text-center text-sm mt-4">
+        <p className="text-center text-sm mt-4 text-gray-100">
           Não tem conta?{" "}
           <a href="/register" className="text-red-500 hover:underline">
             Cadastre-se

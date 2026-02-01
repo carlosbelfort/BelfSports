@@ -40,22 +40,24 @@ export default function PublicGallery() {
 
   return (
     <main>
-    <div className="p-6">
-      <Button variant="gray" onClick={() => router.back()}>
-        ← Voltar
-      </Button>
-      <h1 className="flex justify-center mb-6 text-4xl font-serif font-bold">GALERIA DE FOTOS</h1>
+      <div className="p-6">
+        <Button variant="gray" onClick={() => router.back()}>
+          ← Voltar
+        </Button>
+        <h1 className="flex justify-center mb-6 text-4xl font-serif font-bold">
+          GALERIA DE FOTOS
+        </h1>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {events.map(({ event }) => (
-          <Link key={event.id} href={`/gallery/${event.id}`}>
-            <Card title={event.title}>
-              <p className="text-sm opacity-80">Clique para ver os spots</p>
-            </Card>
-          </Link>
-        ))}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {events.map(({ event }) => (
+            <Link key={event.id} href={`/gallery/${event.id}`}>
+              <Card title={event.title}>
+                <p className="text-sm opacity-80">Clique para ver os spots</p>
+              </Card>
+            </Link>
+          ))}
+        </div>
       </div>
-    </div>
     </main>
   );
 }

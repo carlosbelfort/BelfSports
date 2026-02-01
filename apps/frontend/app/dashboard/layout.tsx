@@ -30,7 +30,7 @@ export default function DashboardLayout({
     );
   }
   return (
-    <div className="flex flex-col min-h-screen bg-zinc-950 text-white">
+    <div className="flex flex-col min-h-screen bg-black/90 text-white">
       <Header onMenuClick={() => setSidebarOpen(true)} />
 
 
